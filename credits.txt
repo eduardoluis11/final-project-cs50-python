@@ -1,2 +1,5 @@
 ## Credits
 
+1) Pygame: I'm using the pygame game engine. Source: https://github.com/pygame/pygame.
+It uses a LGPL license: https://github.com/pygame/pygame/blob/main/docs/LGPL.txt .
+
