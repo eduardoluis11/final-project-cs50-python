@@ -3,10 +3,17 @@ from sys import exit
 
 
 def display_score():
-    current_time = pygame.time.get_ticks()
-    score_surf = test_font.render(f'{current_time}', False, (64, 64, 64))
+    # # My answer:
+    # # I will change the time from milliseconds to seconds by dividing them by 1000, and turing it into an integer
+    # current_time = int((pygame.time.get_ticks() - start_time) / 1000)
+
+    # Changing the time from milliseconds to seconds, and turning them into an integer to remove decimals
+    current_time = int(pygame.time.get_ticks() / 1000) - start_time
+
+    score_surf = test_font.render(f'Score: {current_time}', False, (64, 64, 64))
     score_rect = score_surf.get_rect(center=(400, 50))
     screen.blit(score_surf, score_rect)
+    return current_time
 
 
 pygame.init()
@@ -35,7 +42,24 @@ snail_rect = snail_surf.get_rect(bottomright=(600, 300))
 
 player_gravity = 0
 
-game_active = True
+# Intro screen ("Press start" screen)
+player_stand = pygame.image.load('graphics/player/player_stand.png').convert_alpha()
+player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
+player_stand_rect = player_stand.get_rect(center=(400, 200))
+
+# This adds the game's name / title. It will be rendered on the "Press start" screen
+game_name = test_font.render(f'Pixel Runner', False, (111, 196, 169))
+game_name_rect = game_name.get_rect(center=(400, 80))  # Rectangle for the game's title
+
+# This adds the text for the instructions on how to start the game
+game_message = test_font.render(f'Press Space to start the game', False, (111, 196, 169))
+game_message_rect = game_message.get_rect(center=(400, 340))  # Rectangle for the game's title
+
+# End of the Intro or "Press Start" screen
+
+game_active = False
+start_time = 0
+score = 0
 
 while True:
     for event in pygame.event.get():
@@ -85,12 +109,11 @@ while True:
         else:  # If the player presses the space bar after getting a game over
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
+                snail_rect.left = 800  # This re-positions the snail
+                start_time = int(pygame.time.get_ticks() / 1000)
 
-                # This re-positions the snail
-                snail_rect.left = 800
-
-        if event.type == pygame.KEYUP:
-            print('key up')
+        # if event.type == pygame.KEYUP:
+        #     print('key up')
 
         # # DEBUG: This prints the Y position of the player.
         # # Prints "216"
@@ -102,7 +125,7 @@ while True:
         # pygame.draw.rect(screen, '#c0e8ec', score_rect)
         # pygame.draw.rect(screen, '#c0e8ec', score_rect, 10)
         # screen.blit(score_surf, score_rect)
-        display_score()
+        score = display_score()
 
         # # This draws a line (source: https://www.pygame.org/docs/ref/draw.html#pygame.draw.line) (my answer)
         # pygame.draw.line(sky_surface, 'Yellow', (0, 0), (800, 400))
@@ -135,8 +158,23 @@ while True:
         if snail_rect.colliderect(player_rect):
             game_active = False
 
-    else:  # If the game is inactive
-        screen.fill('Yellow')
+    else:  # If the game is inactive, show the "Press Start" screen
+        screen.fill((94, 129, 162))  # This renders a blue-ish background
+        screen.blit(player_stand, player_stand_rect)  # This renders the sprite of the player standing
+
+        # This renders the score in the "Press start" screen, but makes the time go by. I need to stop the time.
+        score_message = test_font.render(f'Your score: {score}', False, (111, 196, 169))
+        score_message_rect = score_message.get_rect(center=(400, 330))
+
+        screen.blit(game_name, game_name_rect)  # This renders the game's title
+
+        # This renders the instructions text
+        if score == 0:
+            screen.blit(game_message, game_message_rect)  # This renders the game's title
+        else:
+            screen.blit(score_message, score_message_rect)
+
+
 
     # # My answer
     # # This makes the player fall by using gravity. I will change his Y coordinate.
