@@ -3,3 +3,10 @@
 1) Pygame: I'm using the pygame game engine. Source: https://github.com/pygame/pygame.
 It uses a LGPL license: https://github.com/pygame/pygame/blob/main/docs/LGPL.txt .
 
+2) Clear Code's Pygame tutorial. Link to Clear Code's YouTube tutorial that I used:
+https://youtu.be/AY9MnQ4x3zk?si=9B4V7m-shu7QLobW .
+
+Link to Clear Code's GitHub repo, which is where I took the assets, such as sprites,
+to make his runner.py game: https://github.com/clear-code-projects/UltimatePygameIntro .
+
+
