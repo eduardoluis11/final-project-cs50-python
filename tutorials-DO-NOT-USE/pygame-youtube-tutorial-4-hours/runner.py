@@ -2,7 +2,7 @@
 
 Source of pretty much all of this code: "Clear Code" on YouTube: https://youtu.be/AY9MnQ4x3zk?si=mfCvPMEh2o7MNjM0 .
 
-Source of all the assets (music, sprites, etc) used in the runner.py game: Clear Code's GitHub repo at:
+Source of all the assets (music, images, etc) used in the runner.py game: Clear Code's GitHub repo at:
 https://github.com/clear-code-projects/UltimatePygameIntro .
 
 """

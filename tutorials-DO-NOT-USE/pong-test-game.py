@@ -170,7 +170,7 @@ def main():
     rand = (0.1 * (random.randint(5, 8)))
     ball = Ball((0, 0), (0.47, speed))
 
-    # Initialize sprites
+    # Initialize images
     playersprites = pygame.sprite.RenderPlain((player1, player2))
     ballsprite = pygame.sprite.RenderPlain(ball)
 
