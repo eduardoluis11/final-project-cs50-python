@@ -55,16 +55,26 @@ a good idea. To better manipulate the position of each sprite (such as by using 
 it's a good idea to transform the surface into a rectangle, and THEN render the rectangle to render the sprite
 (source: https://youtu.be/AY9MnQ4x3zk?si=PXioHwUA3M8AuL7S) .
 
-Now, I need to render the enemy as a rectangle, NOT AS A SURFACE.
+Now, I need to render the enemy as a rectangle, NOT AS A SURFACE. To convert a surface into a rectangle, I need
+to use get_rect() (source: Clear Code on YouTube at https://youtu.be/AY9MnQ4x3zk?si=aWRIhi1cXXQjBg8O&t=3360).
+
+The enemy will be either at “midtop” or at the “center” (source of the rectangle’s different values and what they do:
+https://youtu.be/AY9MnQ4x3zk?si=MsnmA5-iJE5U5uHq&t=3205 ). I want to use a tuple as a value for the location of the
+enemy sprite.
 
 Then, I will need to re-position the enemy to the center of the screen (such as by using “top”, and then dividing by 2
-the width of the game’s window, which in this case would be 720 / 2).
+the width of the game’s window, which in this case would be 720 / 2). If I want to place the enemy's sprite on both
+the vertical and the horizontal center off the screen, I would have to divide 720 by 2, and 576 by 2. That would be
+360 and 288, respectively.
 
 REMEMBER THAT I NEED TO USE AT LEAST 3 FUNCTIONS to pass this final project! Look at Clear Code’s 4-hour long tutorial,
 since he made some functions towards the last 3rd of the video.
 
 ALSO remember that I need to create some unit tests to test my game to pass the final project!
 
+I will add a convert() call after loading every sprite as a surface to load the sprites as efficiently and optimized
+as possible in the game. Also, if I use PNG files, which will have a transparent background, I need to use
+"convert_alpha", NOT "convert" alone (source: https://youtu.be/AY9MnQ4x3zk?si=NkKrtiIpKEUUDDvg&t=3256).
 """
 
 import pygame
@@ -85,8 +95,10 @@ pygame.display.set_caption("Gold Standard")
 # This loads the enemy sprite, but doesn't render it yet (source:
 # https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
 # EDIT LATER, since it's using a PLACEHOLDER sprite.
-enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png')
+enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png').convert_alpha()
 
+# This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
+enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
 
 while True:  # Infinite loop that will pretty much make the entire game run
 
@@ -102,9 +114,8 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
     # This renders the sprites
 
-    # This renders the enemy's sprite.
-    # I NEED TO FIX THE POSITION LATER, AND use a "rectangle" instead of rendering the "surface".
-    game_window.blit(enemy_surface, (100, 100))
+    # This renders the enemy's sprite. The position will be rendered with a rectangle.
+    game_window.blit(enemy_surface, enemy_rectangle)
 
     # This should render the game's window, and every sprite
     pygame.display.update()
