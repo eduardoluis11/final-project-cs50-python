@@ -107,6 +107,42 @@ coordinate of the left side of the rectangle, the Y coordinate of the top of the
 height of the rectangle (source: Pygame’s official documentation at https://www.pygame.org/docs/ref/rect.html ). If
 I want to draw square, I would just put the width and the height as the same value while using draw.rect(). Now, I have
 a black rectangle with a white border.
+
+Now, I will add a new text at the top that says “A Hostile Robot Leader has ambushed you / has shown up!”, to indicate
+that combat has begun for the boss battle.
+
+To read through the dialogues and windows move (i.e: when the messages “a wild Hostile Robot Boss has shown up!”,
+“the Hostile Robot has hit you for 10 HP of damage”), you will have to press “Z”, right shift, space, left mouse click,
+etc. That is, you will have to press “Z” to read each combat dialogue message, just like in the Pokemon games. The
+messages won’t go by automatically.
+
+The battle messages should be in a variable, and the variable should be constantly updated. Otherwise, I would need to
+constantly create new battle messages. I should have the following:
+    A message for when the battle starts.
+    A message for when the enemy hurts you.
+    A message for when you hurt the enemy.
+    A message for when you lose.
+    A message for when you defeat the enemy.
+
+And remember that the amounts in which the enemy will hurt you and you will hurt the enemy will be random like in the
+Final Fantasy games (i.e: you make “20”, “30”, “22”, etc, of damage, instead of a fixed amount). For that, I won’t
+create a different surface for each of those messages. Instead, I will store each message in a variable, and render the
+variable when needed.
+
+Also, since the battle menu and the battle messages will be rendered in the same Pygame rectangle, I will create only 1
+rectangle that I will re-use for both the Battle Menu and the Battle messages. I will create multiple surfaces (1 for
+the battle Menu, and 1 for the battle messages), but I will re-use the same Pygame rectangle.
+
+I could create 2 functions: one for when the enemy attacks the user, and another one for when the user attacks the
+enemy. Or it could be the same function.
+
+And I could make a function for when you have to use the Battle Menu (for instance, for if you want to choose “attack”,
+“defend”, or “use item”).
+
+Since the number of turns really doesn’t matter for my game, I could simply put the default message / string in the
+“battle messages” variable to be “an enemy has appeared!”. I will do that since that message will be rendered only in
+the very first turn, and won’t be shown up ever again (unless the user returns to the “Press Start” screen after
+winning or losing the battle).
 """
 
 import pygame
@@ -125,8 +161,8 @@ pygame.display.set_caption("Gold Standard")
 
 # This specifies the font that I will use, and its size. At least, I will use this for the playable character's name.
 game_font = pygame.font.Font(None, 32)
-
-players_current_hp = 100    # This stores the current HP for the player. This goes down if the enemy hurts you.
+players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
+battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
 
 # Sprites and surface
 # This loads the enemy sprite, but doesn't render it yet (source:
@@ -138,6 +174,11 @@ enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-pla
 enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
 
 # Text surfaces and rectangles.
+
+# Surface for the Battle Messages
+battle_messages_surface = game_font.render(battle_message, False, 'White')
+battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(20, 20))  # Battle messages' rectangle
+
 # Surface for the Playable Character's name
 playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
 
@@ -150,8 +191,6 @@ players_hp_surface = game_font.render(f'HP: {players_current_hp}/100', False, 'W
 # Rectangle for the Player's HP
 players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
 # End of text surfaces
-
-
 
 
 while True:  # Infinite loop that will pretty much make the entire game run
@@ -171,13 +210,19 @@ while True:  # Infinite loop that will pretty much make the entire game run
     # This renders the enemy's sprite. The position will be rendered with a rectangle.
     game_window.blit(enemy_surface, enemy_rectangle)
 
+    # Battle Messages' UI.
+    # This renders the text for the current battle message
+    game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+    # End of the Battle Messages' UI.
+
     # Player's UI.
     # White rectangle. This will act as a border for a black box / rectangle that will contain the player's stats.
     # I'll look up Pygame's documentation to learn how to draw a box / rectangle with custom dimensions.
-    pygame.draw.rect(game_window, 'White', ((260, 280), (200, 270)))
+    pygame.draw.rect(game_window, 'White', ((260, 400), (200, 160)))
 
     # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
-    pygame.draw.rect(game_window, 'Black', ((270, 290), (180, 250)))
+    pygame.draw.rect(game_window, 'Black', ((270, 410), (180, 140)))
 
     # pygame.Rect((360, 280), (200, 50))
 
