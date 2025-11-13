@@ -96,7 +96,17 @@ different variable, so that, if I get hurt, my HP will go down in the UI (since 
 I will add a rectangle to both the playable character’s name and his HP, and I will add it to their surfaces. That way,
 I’ll be able to easily center them horizontally. And that way, I’ll be able to easily put the playable character’s data
 inside a box. To whatever Y position the player's name has, I will add 40 units to the Y position of the player's HP.
-That distance looks good.
+That distance looks good. Now, I will add the black rectangle within the white rectangle for the box  that will contain
+the player’s name and HP. REMEMBER that this box should be in a “layer” BEHIND the layer that contains the text with
+the player’s stats. How to draw a rectangle: Clear Code at https://youtu.be/AY9MnQ4x3zk?si=8ZF9bckxd6UbMnYe&t=4811 .
+
+To draw a rectangle, I needed to first use the draw() function from pygame (source: Pygame’s official documentation at
+https://www.pygame.org/docs/ref/draw.html#pygame.draw.rect ). Then, in the last parameter of draw.rect(), I needed to
+pass either a Rect() game object (a rectangle game object from Pygame), or 4 parameters within parentheses: the the x
+coordinate of the left side of the rectangle, the Y coordinate of the top of the rectangle, and the width and the
+height of the rectangle (source: Pygame’s official documentation at https://www.pygame.org/docs/ref/rect.html ). If
+I want to draw square, I would just put the width and the height as the same value while using draw.rect(). Now, I have
+a black rectangle with a white border.
 """
 
 import pygame
@@ -161,11 +171,20 @@ while True:  # Infinite loop that will pretty much make the entire game run
     # This renders the enemy's sprite. The position will be rendered with a rectangle.
     game_window.blit(enemy_surface, enemy_rectangle)
 
+    # Player's UI.
+    # White rectangle. This will act as a border for a black box / rectangle that will contain the player's stats.
+    # I'll look up Pygame's documentation to learn how to draw a box / rectangle with custom dimensions.
+    pygame.draw.rect(game_window, 'White', ((260, 280), (200, 270)))
+
+    # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
+    pygame.draw.rect(game_window, 'Black', ((270, 290), (180, 250)))
+
+    # pygame.Rect((360, 280), (200, 50))
+
     # This render's the playable character's name. It should be in the horizontal center, and below the enemy.
     game_window.blit(playable_characters_name_surface, playable_characters_name_rectangle)
-
-    # Player's current HP
-    game_window.blit(players_hp_surface, players_hp_rectangle)
+    game_window.blit(players_hp_surface, players_hp_rectangle)  # Player's current HP
+    # End of the Player's UI.
 
     # This should render the game's window, and every sprite
     pygame.display.update()
