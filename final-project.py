@@ -142,7 +142,8 @@ And I could make a function for when you have to use the Battle Menu (for instan
 Since the number of turns really doesn’t matter for my game, I could simply put the default message / string in the
 “battle messages” variable to be “an enemy has appeared!”. I will do that since that message will be rendered only in
 the very first turn, and won’t be shown up ever again (unless the user returns to the “Press Start” screen after
-winning or losing the battle).
+winning or losing the battle). Now, I’ll insert the black box / rectangle inside the white box for the battle messages
+UI.
 """
 
 import pygame
@@ -177,7 +178,7 @@ enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
 
 # Surface for the Battle Messages
 battle_messages_surface = game_font.render(battle_message, False, 'White')
-battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(20, 20))  # Battle messages' rectangle
+battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(35, 30))  # Battle messages' rectangle
 
 # Surface for the Playable Character's name
 playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
@@ -211,6 +212,14 @@ while True:  # Infinite loop that will pretty much make the entire game run
     game_window.blit(enemy_surface, enemy_rectangle)
 
     # Battle Messages' UI.
+
+    # White rectangle. This will act as a border for a black box that will contain the battle messages.
+    # In the last 4 parameters, I will first specify the X and Y coordinates, and then the width and the height.
+    pygame.draw.rect(game_window, 'White', ((20, 15), (680, 160)))
+
+    # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
+    pygame.draw.rect(game_window, 'Black', ((30, 25), (660, 140)))
+
     # This renders the text for the current battle message
     game_window.blit(battle_messages_surface, battle_messages_rectangle)
 
