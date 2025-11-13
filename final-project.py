@@ -93,6 +93,10 @@ first render the HP as being hard-coded, that is, I will type the HP will always
 so that your HP points go down each  time that the enemy hurts you. I’m already storing the Player’s current HP in a
 different variable, so that, if I get hurt, my HP will go down in the UI (since I’m using Python’s formatted strings).
 
+I will add a rectangle to both the playable character’s name and his HP, and I will add it to their surfaces. That way,
+I’ll be able to easily center them horizontally. And that way, I’ll be able to easily put the playable character’s data
+inside a box. To whatever Y position the player's name has, I will add 40 units to the Y position of the player's HP.
+That distance looks good.
 """
 
 import pygame
@@ -110,9 +114,9 @@ game_window = pygame.display.set_mode((720, 576))
 pygame.display.set_caption("Gold Standard")
 
 # This specifies the font that I will use, and its size. At least, I will use this for the playable character's name.
-game_font = pygame.font.Font(None, 35)
+game_font = pygame.font.Font(None, 32)
 
-players_current_hp = 55    # This stores the current HP for the player. This goes down if the enemy hurts you.
+players_current_hp = 100    # This stores the current HP for the player. This goes down if the enemy hurts you.
 
 # Sprites and surface
 # This loads the enemy sprite, but doesn't render it yet (source:
@@ -123,14 +127,22 @@ enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-pla
 # This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
 enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
 
-# Text surfaces.
+# Text surfaces and rectangles.
 # Surface for the Playable Character's name
-playable_characters_name_surface = game_font.render('Midas', False, 'White')
+playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
+
+# Playable character's name's rectangle
+playable_characters_name_rectangle = playable_characters_name_surface.get_rect(center=(360, 440))
 
 # Surface for the Playable Character's HP (Hit Points / life points)
 players_hp_surface = game_font.render(f'HP: {players_current_hp}/100', False, 'White')
 
+# Rectangle for the Player's HP
+players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
 # End of text surfaces
+
+
+
 
 while True:  # Infinite loop that will pretty much make the entire game run
 
@@ -150,10 +162,10 @@ while True:  # Infinite loop that will pretty much make the entire game run
     game_window.blit(enemy_surface, enemy_rectangle)
 
     # This render's the playable character's name. It should be in the horizontal center, and below the enemy.
-    game_window.blit(playable_characters_name_surface, (320, 400))
+    game_window.blit(playable_characters_name_surface, playable_characters_name_rectangle)
 
     # Player's current HP
-    game_window.blit(players_hp_surface, (320, 450))
+    game_window.blit(players_hp_surface, players_hp_rectangle)
 
     # This should render the game's window, and every sprite
     pygame.display.update()
