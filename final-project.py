@@ -160,6 +160,18 @@ the boolean thing that will switch from “True” to “False” if you press a
 message in the console). Done! I only turn the “display battle intro message” to “False” once, and only after pressing
 the “Z” key on the keyboard.
 
+I have an idea: to make the “an enemy has appeared!” message to disappear after pressing the “confirmation” key, I will
+simply make an “if” statement saying that the “an enemy has appeared” message to only show up if the “display intro
+message” boolean is True. That way, as soon as I press the confirmation key during the very first turn, that message
+will disappear for the rest of the game.
+
+So, I have another idea: I will decide whether to render the battle messages, or the battle menu’s UI. If the current
+turn requires me to render the battle messages, I will render the battle messages. Otherwise, I will render the battle
+menu. Now, to decide whether I should render the battle menu or the battle messages, I could use a boolean. I could
+make a boolean that says “should battle menu be rendered” or something like that. By default, it will be false. But,
+after pressing the confirmation key during the very first turn, the “should battle menu be rendered” boolean should
+switch to “true”. Then, checking the “if” statements of my “while True” snippet, I should check if the “render battle
+menu” boolean is set to true. If it is, I should render the battle menu. Otherwise, I should render the battle messages.
 """
 
 import pygame
@@ -181,6 +193,7 @@ game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
 display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
+display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
 
 # Sprites and surface
 # This loads the enemy sprite, but doesn't render it yet (source:
@@ -226,13 +239,14 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
             # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being displayed
             if event.key == pygame.K_z and display_battle_intro_message:
-
                 # This will turn the boolean that displays the "enemy has appeared!" message to "False"
                 display_battle_intro_message = False
 
+                # This will let me render the battle menu's UI
+                display_battle_menu = True
+
                 # DEBUG: This should print "False" for the boolean that displays the intro message
                 print("Intro message boolean's current state: " + str(display_battle_intro_message))
-
 
     # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
@@ -250,8 +264,14 @@ while True:  # Infinite loop that will pretty much make the entire game run
     # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
     pygame.draw.rect(game_window, 'Black', ((30, 25), (660, 140)))
 
-    # This renders the text for the current battle message
-    game_window.blit(battle_messages_surface, battle_messages_rectangle)
+    if display_battle_menu:  # If the boolean that lets me render the battle menu is true
+
+        # Show the battle menu (TODO)
+        pass
+    else: # If the battle menu is set to False, render the battle messages
+
+        # This renders the text for the current battle message
+        game_window.blit(battle_messages_surface, battle_messages_rectangle)
 
     # End of the Battle Messages' UI.
 
