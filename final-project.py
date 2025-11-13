@@ -144,6 +144,22 @@ Since the number of turns really doesn’t matter for my game, I could simply pu
 the very first turn, and won’t be shown up ever again (unless the user returns to the “Press Start” screen after
 winning or losing the battle). Now, I’ll insert the black box / rectangle inside the white box for the battle messages
 UI.
+
+Now, I need to add events so that, if the user presses any key (such as right shift, “z”, the space bar, a mouse click,
+etc), you will go from the battle message to the Battle Menu UI to decide if you want to attack or do something else.
+
+NOTE: I need 2 buttons: one to confirm, and another one to cancel. So, I could use the space bar or the right shift
+button to confirm, and the Backspace to cancel. I can’t just put every keyboard key and every mouse click to confirm,
+because, otherwise, it would be impossible for me to cancel any actions.
+
+I have an idea: I could detect if the user has pressed either “Z” or right shift (which will be the confirmation
+buttons). If they do, I will detect a boolean that detects if it’s the 1st turn or not. That boolean will start as
+“True”. Then, if the user presses a confirmation button, that boolean will switch to “False”. Then, I will call a
+function that will call the battle menu UI (so that you can select if you want to attack or defend). I will start with
+the boolean thing that will switch from “True” to “False” if you press a confirmation button (I could print a debugging
+message in the console). Done! I only turn the “display battle intro message” to “False” once, and only after pressing
+the “Z” key on the keyboard.
+
 """
 
 import pygame
@@ -164,6 +180,7 @@ pygame.display.set_caption("Gold Standard")
 game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
+display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
 
 # Sprites and surface
 # This loads the enemy sprite, but doesn't render it yet (source:
@@ -203,6 +220,19 @@ while True:  # Infinite loop that will pretty much make the entire game run
             # This will efficiently close the game
             pygame.quit()
             exit()
+
+        # If the user presses a key
+        if event.type == pygame.KEYDOWN:
+
+            # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being displayed
+            if event.key == pygame.K_z and display_battle_intro_message:
+
+                # This will turn the boolean that displays the "enemy has appeared!" message to "False"
+                display_battle_intro_message = False
+
+                # DEBUG: This should print "False" for the boolean that displays the intro message
+                print("Intro message boolean's current state: " + str(display_battle_intro_message))
+
 
     # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
