@@ -88,7 +88,10 @@ his HP points (for instance, “HP: 100/100”). I will render this text right b
 it's Pygame's default font, I need to use "pygame.font.Font(font_name, font_size)" (source: Clear Code at
 https://youtu.be/AY9MnQ4x3zk?si=wipQ0_t-8tPlMym9&t=2331). For the surface of the text that I will render, I will
 specify the message to be rendered (i.e: the name of the playable character), if it has Anti Aliasing (not recommended
-if I'll use pixel art-based text), and the text's color.
+if I'll use pixel art-based text), and the text's color. Now, I will render the main character’s HP points. I could at
+first render the HP as being hard-coded, that is, I will type the HP will always be 100/100. I will later fix that
+so that your HP points go down each  time that the enemy hurts you. I’m already storing the Player’s current HP in a
+different variable, so that, if I get hurt, my HP will go down in the UI (since I’m using Python’s formatted strings).
 
 """
 
@@ -106,8 +109,10 @@ game_window = pygame.display.set_mode((720, 576))
 # This will add the game's title to the window's tab
 pygame.display.set_caption("Gold Standard")
 
-# This specifies the font that I will use, and its size
+# This specifies the font that I will use, and its size. At least, I will use this for the playable character's name.
 game_font = pygame.font.Font(None, 35)
+
+players_current_hp = 55    # This stores the current HP for the player. This goes down if the enemy hurts you.
 
 # Sprites and surface
 # This loads the enemy sprite, but doesn't render it yet (source:
@@ -118,8 +123,14 @@ enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-pla
 # This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
 enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
 
+# Text surfaces.
 # Surface for the Playable Character's name
 playable_characters_name_surface = game_font.render('Midas', False, 'White')
+
+# Surface for the Playable Character's HP (Hit Points / life points)
+players_hp_surface = game_font.render(f'HP: {players_current_hp}/100', False, 'White')
+
+# End of text surfaces
 
 while True:  # Infinite loop that will pretty much make the entire game run
 
@@ -140,6 +151,9 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
     # This render's the playable character's name. It should be in the horizontal center, and below the enemy.
     game_window.blit(playable_characters_name_surface, (320, 400))
+
+    # Player's current HP
+    game_window.blit(players_hp_surface, (320, 450))
 
     # This should render the game's window, and every sprite
     pygame.display.update()
