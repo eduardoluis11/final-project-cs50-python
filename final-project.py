@@ -75,6 +75,21 @@ ALSO remember that I need to create some unit tests to test my game to pass the 
 I will add a convert() call after loading every sprite as a surface to load the sprites as efficiently and optimized
 as possible in the game. Also, if I use PNG files, which will have a transparent background, I need to use
 "convert_alpha", NOT "convert" alone (source: https://youtu.be/AY9MnQ4x3zk?si=NkKrtiIpKEUUDDvg&t=3256).
+
+“Pygame comes with a builtin default font, freesansbold. This can always be accessed by passing None as the font
+name.” (Source: Pygame’s official documentation at https://www.pygame.org/docs/ref/font.html ). So yeah, pygame already
+has a default font. I don’t need to install any fonts to print text in pygame.
+
+To make things simpler, and to not to move the camera like in Earthbound Beginnings’ combat, I will put both the battle
+messages (“you have done 20 points of damage to the boss”; “the boss hit you for 30 points of damage”) and the battle
+menu at the top of the screen, right above the boss. The only text that will be below the boss will be the name of the
+main character and his HP points. So, now I’m going to render white text that says “Midas / Aurelius / Ludwig”, and
+his HP points (for instance, “HP: 100/100”). I will render this text right below the enemy. To add a font, even if
+it's Pygame's default font, I need to use "pygame.font.Font(font_name, font_size)" (source: Clear Code at
+https://youtu.be/AY9MnQ4x3zk?si=wipQ0_t-8tPlMym9&t=2331). For the surface of the text that I will render, I will
+specify the message to be rendered (i.e: the name of the playable character), if it has Anti Aliasing (not recommended
+if I'll use pixel art-based text), and the text's color.
+
 """
 
 import pygame
@@ -91,14 +106,20 @@ game_window = pygame.display.set_mode((720, 576))
 # This will add the game's title to the window's tab
 pygame.display.set_caption("Gold Standard")
 
-# Sprites
+# This specifies the font that I will use, and its size
+game_font = pygame.font.Font(None, 35)
+
+# Sprites and surface
 # This loads the enemy sprite, but doesn't render it yet (source:
 # https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
-# EDIT LATER, since it's using a PLACEHOLDER sprite.
+# EDIT LATER, since I'm using a PLACEHOLDER sprite.
 enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png').convert_alpha()
 
 # This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
 enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
+
+# Surface for the Playable Character's name
+playable_characters_name_surface = game_font.render('Midas', False, 'White')
 
 while True:  # Infinite loop that will pretty much make the entire game run
 
@@ -116,6 +137,9 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
     # This renders the enemy's sprite. The position will be rendered with a rectangle.
     game_window.blit(enemy_surface, enemy_rectangle)
+
+    # This render's the playable character's name. It should be in the horizontal center, and below the enemy.
+    game_window.blit(playable_characters_name_surface, (320, 400))
 
     # This should render the game's window, and every sprite
     pygame.display.update()
