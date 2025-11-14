@@ -317,6 +317,14 @@ def display_battle_message():
 
 I could later on use a “match / case” so that, depending on the button that you pressed (“1”, “2”, or “3”), I will do 
 the selected command (I will either attack, defend, or heal).
+
+My plan worked! If I update the surface variable for the battle message (which contains the battle message), and then I 
+try to render the battle message via using blit(), the “battle message” variable will be updated with the modified 
+battle message. In my case, i’m updating the “battle message” variable to “you have attacked the enemy!” if you press 
+the “1” key. Then further down the “while true” loop, if the “display battle menu” boolean is false (the battle menu 
+isn’t being rendered), when I render the surface of the battle message by using blit(), I re-create the surface for the 
+battle message. Otherwise, the “battle message” variable inserted as the 1st parameter of the surface will eb the one 
+declared before the “while true” loop, which, at that point, is “an enemy has appeared!”
 """
 while True:  # Infinite loop that will pretty much make the entire game run
 
@@ -342,23 +350,33 @@ while True:  # Infinite loop that will pretty much make the entire game run
                 # # DEBUG: This should print "False" for the boolean that displays the intro message
                 # print("Intro message boolean's current state: " + str(display_battle_intro_message))
 
-
-            if display_battle_menu:     # If the battle menu is being displayed
+            if display_battle_menu:  # If the battle menu is being displayed
 
                 # I will use a match / case to detect which of the 3 battle command keys are being pressed
                 match event.key:
 
-                    case pygame.K_1:    # If the user presses "1"
+                    case pygame.K_1:  # If the user presses "1"
+
+                        # Thi makes the battle menu to disappear so that the battle messages are rendered
+                        display_battle_menu = False
+
+                        # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
+                        # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
+                        # battle_message = "Ludwig attacks the enemy!"
+                        # game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+                        battle_message = "Ludwig attacks the enemy!"
+
 
                         # DEBUG: print "you attacked"
                         print("Ludwig attacks the enemy!")
 
-                    case pygame.K_2:    # If the user presses "2"
+                    case pygame.K_2:  # If the user presses "2"
 
                         # DEBUG: print "you are on guard"
                         print("Ludwig is on guard!")
 
-                    case pygame.K_3:    # if the user presses "3"
+                    case pygame.K_3:  # if the user presses "3"
 
                         # DEBUG: print "you have drank a potion"
                         print("Ludwig drank a potion! you have recovered 30 points of HP!")
@@ -386,10 +404,16 @@ while True:  # Infinite loop that will pretty much make the entire game run
         game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
         game_window.blit(potion_command_surface, potion_command_rectangle)  # Render the "use potion" command
 
+    # REACTIVATE LATER?
     else:  # If the battle menu is set to False, render the battle messages
+
+        # This should overwrite the battle message surface with the new battle message after any action in the game.
+        battle_messages_surface = game_font.render(battle_message, False, 'White')
 
         # This renders the text for the current battle message
         game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+    # END OF THE SNIPPET THAT I NEED TO REACTIVATE LATER.
 
     # End of the Battle Messages' UI.
 
