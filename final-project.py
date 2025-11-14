@@ -172,11 +172,73 @@ make a boolean that says “should battle menu be rendered” or something like 
 after pressing the confirmation key during the very first turn, the “should battle menu be rendered” boolean should
 switch to “true”. Then, checking the “if” statements of my “while True” snippet, I should check if the “render battle
 menu” boolean is set to true. If it is, I should render the battle menu. Otherwise, I should render the battle messages.
+
+If I want to use object oriented programming, I could create a class with the properties for both the player and the
+enemy. I could create a class called “Character”. In it, I would put at least 2 properties: attack points, and HP.
+“Attack points” would be how much damage each character could do. Meanwhile, “hp” refers to how many life points each
+character has (which, in this case, it's just the enemy and the player). This could help me keep my code organized
+(using the “character class”). But I don’t know how to call those object oriented classes in my game. I need to have a
+look at my object oriented programming classes’ homework assignments to remember how to use object oriented programming
+(similar to django’s models).
+
+I could make calls to two functions in the “while True” loop: one for the player’s turn, and another one for the
+enemy’s turn. And each of those functions could make a call to a function called “battle_messages()”.
+In fact:  during each iteration of the “while true” loop, I could call those 3 functions in the following order:
+    display_battle_message()
+    players_turn()
+    display_battle_message()
+    enemys_turn()
+
+And in fact, the very first call to the “display battle message()” could render the “an enemy has appeared!” message.
+I don’t need to use booleans. And remember that, since the “while true” loop is an infinite loop, that loop will always
+be repeated over and over again. So, in each iteration of the infinite loop, I would first call the function that
+displays battle messages, then it would be the player’s turn, then the battle messages would be displayed, and then it
+would be the enemy’s turn. Then, the entire loop would be repeated. I could make it so that you would go from the
+battle messages to the player’s or the enemy’s turn by pressing “Z”. So, during my very first call to the “display
+battle messages()” function, I would display the default message in the “battle message” variable, which is “an enemy
+has appeared!”. Well, after that first call, I would then go to the player’s turn via the “players turn()” function.
+Well, in the player’s turn() function, I would overwrite the string inside the “battle message” variable for another
+battle message (such as “ludwig did {amount of damage} points of damage!”). I don’t need to use any booleans. Then,
+in the enemy’s turn, the entire turn would be invisible (it would be in the “backend”). The enemy would decide which
+attack to use, or if they would prepare a super attack, or not do anything. But  nothing would be printed onscreen.
+Then, after calling again the “display battle message()” function, I would print the enemy’s decision (i.e: “the enemy
+has attacked you for {amount of damage} points of damage!”).
+
+I would do the following:
+
+1) I could print the “an enemy has appeared!” message. I could simply print whatever message is stored in the “battle
+message” variable.
+
+2) Then, it would be the player’s turn. I would need to make the battle message to disappear.
+
+3) I would print the options for the battle menu. I DON’T have to ask the user to use the arrow keys to select an
+attack. I could simply ask the user to press any number between 1 and 3 (“1” for attacking the enemy, “2” for
+defending, “3” for selecting an item). That is, I could make the battle menu like in persona 5. This would be easier
+to code. Detecting each individual option selected with the arrow keys would be hard to code.
+
+
+3) After the player selects an option (by pressing “1”, “2”, or “3”), a battle message would be displayed indicating
+what the player did (either stating how much damage you did to the enemy, if you healed, or if you guarded against the
+next attack).
+
+4) Then, it would be the enemy’s turn. The enemy would automatically decide what to do (attacking, wasting a turn, or
+preparing for a super attack). Here, I could update the “battle message” variable to print whatever the enemy decided to do to you. To update the “battle message” variable, I could call a function, and said function should return a string. That string would be the new value for the “battle message” variable.
+
+5) A battle message would be displayed indicating what the enemy did (like attacking you normally, attacking you with a
+super attack, or wasting a turn).
+
+6) The entire loop would be repeated.
+
+
 """
 
 import pygame
 
 from sys import exit  # If I want to exit the game properly, I'll use sys.exit()
+
+# # Class which will store the characters' Health Points and Attack Points as properties
+# class Character:
+
 
 # All of this code should make it so that a black screen shows up when you execute this python script (source:
 # https://youtu.be/AY9MnQ4x3zk?si=28DorTag9IRSrUi3&t=1099).
@@ -191,6 +253,8 @@ pygame.display.set_caption("Gold Standard")
 # This specifies the font that I will use, and its size. At least, I will use this for the playable character's name.
 game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
+players_number_of_potions = 5  # Initial number of potions that the player has.
+
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
 display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
 display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
@@ -221,9 +285,36 @@ players_hp_surface = game_font.render(f'HP: {players_current_hp}/100', False, 'W
 
 # Rectangle for the Player's HP
 players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
+
+# Battle Menu UI
+attack_command_surface = game_font.render('[1]: Attack', False, 'White')  # Attack command's surface
+attack_command_rectangle = attack_command_surface.get_rect(topleft=(35, 30))  # Attack command's rectangle
+
+guard_command_surface = game_font.render('[2]: Guard', False, 'White')  # Guard command's surface
+guard_command_rectangle = guard_command_surface.get_rect(midleft=(35, 80))  # Guard command's rectangle
+
+potion_command_surface = game_font.render(f'[3]: Use Potion ({players_number_of_potions} remaining)',
+                                          False, 'White')  # Use Potion command
+potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # Use Potion command's rectangle
+# End of the Battle Menu UI
 # End of text surfaces
 
+# Functions / methods.
 
+""" Display battle message() function.
+
+This will display all the battle messages. That includes the default one: the one that says "an enemy has appeared!".
+
+Let me se Clear Code's 4-hour long tutorial, and see how he created and called the functions in his pygame game.
+"""
+
+
+def display_battle_message():
+    return 1
+
+
+""" Infinite loop that will render the game.
+"""
 while True:  # Infinite loop that will pretty much make the entire game run
 
     # For any input taken by the user (such as clicking the mouse or closing the window)
@@ -245,8 +336,8 @@ while True:  # Infinite loop that will pretty much make the entire game run
                 # This will let me render the battle menu's UI
                 display_battle_menu = True
 
-                # DEBUG: This should print "False" for the boolean that displays the intro message
-                print("Intro message boolean's current state: " + str(display_battle_intro_message))
+                # # DEBUG: This should print "False" for the boolean that displays the intro message
+                # print("Intro message boolean's current state: " + str(display_battle_intro_message))
 
     # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
@@ -266,9 +357,12 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
     if display_battle_menu:  # If the boolean that lets me render the battle menu is true
 
-        # Show the battle menu (TODO)
-        pass
-    else: # If the battle menu is set to False, render the battle messages
+        # Show the battle menu
+        game_window.blit(attack_command_surface, attack_command_rectangle)  # Render the "attack" command
+        game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
+        game_window.blit(potion_command_surface, potion_command_rectangle)  # Render the "use potion" command
+
+    else:  # If the battle menu is set to False, render the battle messages
 
         # This renders the text for the current battle message
         game_window.blit(battle_messages_surface, battle_messages_rectangle)
