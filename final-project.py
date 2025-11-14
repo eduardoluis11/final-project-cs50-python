@@ -314,6 +314,9 @@ def display_battle_message():
 
 
 """ Infinite loop that will render the game.
+
+I could later on use a “match / case” so that, depending on the button that you pressed (“1”, “2”, or “3”), I will do 
+the selected command (I will either attack, defend, or heal).
 """
 while True:  # Infinite loop that will pretty much make the entire game run
 
@@ -338,6 +341,27 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
                 # # DEBUG: This should print "False" for the boolean that displays the intro message
                 # print("Intro message boolean's current state: " + str(display_battle_intro_message))
+
+
+            if display_battle_menu:     # If the battle menu is being displayed
+
+                # I will use a match / case to detect which of the 3 battle command keys are being pressed
+                match event.key:
+
+                    case pygame.K_1:    # If the user presses "1"
+
+                        # DEBUG: print "you attacked"
+                        print("Ludwig attacks the enemy!")
+
+                    case pygame.K_2:    # If the user presses "2"
+
+                        # DEBUG: print "you are on guard"
+                        print("Ludwig is on guard!")
+
+                    case pygame.K_3:    # if the user presses "3"
+
+                        # DEBUG: print "you have drank a potion"
+                        print("Ludwig drank a potion! you have recovered 30 points of HP!")
 
     # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
