@@ -391,8 +391,13 @@ while True:  # Infinite loop that will pretty much make the entire game run
                         # This updates the battle message to indicate that you're drinking a potion
                         battle_message = "Ludwig drank a potion! You have recovered 30 points of HP!"
 
+                        # This reduces the number of potions that you have by 1
+                        players_number_of_potions = players_number_of_potions - 1
+
                         # DEBUG: print "you have drank a potion"
                         print("Ludwig drank a potion! You have recovered 30 points of HP!")
+                        # This prints how many potions you have remaining
+                        print(f"Now, you have {players_number_of_potions} potions left.")
 
     # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
