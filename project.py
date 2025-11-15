@@ -240,66 +240,222 @@ from sys import exit  # If I want to exit the game properly, I'll use sys.exit()
 # class Character:
 
 
-# All of this code should make it so that a black screen shows up when you execute this python script (source:
-# https://youtu.be/AY9MnQ4x3zk?si=28DorTag9IRSrUi3&t=1099).
-pygame.init()
 
-# This will render any screen / window, be it the battle screen, the press start screen, etc
-game_window = pygame.display.set_mode((720, 576))
-
-# This will add the game's title to the window's tab
-pygame.display.set_caption("Gold Standard")
-
-# This specifies the font that I will use, and its size. At least, I will use this for the playable character's name.
-game_font = pygame.font.Font(None, 32)
-players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
-players_number_of_potions = 5  # Initial number of potions that the player has.
-
-battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
-display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
-display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
-
-# Sprites and surface
-# This loads the enemy sprite, but doesn't render it yet (source:
-# https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
-# EDIT LATER, since I'm using a PLACEHOLDER sprite.
-enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png').convert_alpha()
-
-# This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
-enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
-
-# Text surfaces and rectangles.
-
-# Surface for the Battle Messages
-battle_messages_surface = game_font.render(battle_message, False, 'White')
-battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(35, 30))  # Battle messages' rectangle
-
-# Surface for the Playable Character's name
-playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
-
-# Playable character's name's rectangle
-playable_characters_name_rectangle = playable_characters_name_surface.get_rect(center=(360, 440))
-
-# Surface for the Playable Character's HP (Hit Points / life points)
-players_hp_surface = game_font.render(f'HP: {players_current_hp}/100', False, 'White')
-
-# Rectangle for the Player's HP
-players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
-
-# Battle Menu UI
-attack_command_surface = game_font.render('[1]: Attack', False, 'White')  # Attack command's surface
-attack_command_rectangle = attack_command_surface.get_rect(topleft=(35, 30))  # Attack command's rectangle
-
-guard_command_surface = game_font.render('[2]: Guard', False, 'White')  # Guard command's surface
-guard_command_rectangle = guard_command_surface.get_rect(midleft=(35, 80))  # Guard command's rectangle
-
-potion_command_surface = game_font.render(f'[3]: Use Potion ({players_number_of_potions} remaining)',
-                                          False, 'White')  # Use Potion command
-potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # Use Potion command's rectangle
-# End of the Battle Menu UI
-# End of text surfaces
 
 # Functions / methods.
+
+""" Main() function.
+
+I will call the 3 functions required for this project from this function. 
+
+I think I will call the “while True” function from the main() function. Otherwise, I have no arguments to pass to the 
+main() function. Most of the code that will make the game run will be on the main() function.
+
+Infinite loop that will render the game.
+
+I could later on use a “match / case” so that, depending on the button that you pressed (“1”, “2”, or “3”), I will do
+the selected command (I will either attack, defend, or heal).
+
+My plan worked! If I update the surface variable for the battle message (which contains the battle message), and then I
+try to render the battle message via using blit(), the “battle message” variable will be updated with the modified
+battle message. In my case, i’m updating the “battle message” variable to “you have attacked the enemy!” if you press
+the “1” key. Then further down the “while true” loop, if the “display battle menu” boolean is false (the battle menu
+isn’t being rendered), when I render the surface of the battle message by using blit(), I re-create the surface for the
+battle message. Otherwise, the “battle message” variable inserted as the 1st parameter of the surface will eb the one
+declared before the “while true” loop, which, at that point, is “an enemy has appeared!”
+
+"""
+
+
+def main():
+    # All of this code should make it so that a black screen shows up when you execute this python script (source:
+    # https://youtu.be/AY9MnQ4x3zk?si=28DorTag9IRSrUi3&t=1099).
+    pygame.init()
+
+    # This will render any screen / window, be it the battle screen, the press start screen, etc
+    game_window = pygame.display.set_mode((720, 576))
+
+    # This will add the game's title to the window's tab
+    pygame.display.set_caption("Gold Standard")
+
+    # This specifies the font that I will use, and its size. At least, I will use this for the playable character's name.
+    game_font = pygame.font.Font(None, 32)
+    players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
+    players_number_of_potions = 5  # Initial number of potions that the player has.
+
+    battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
+    display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
+    display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
+
+    # Sprites and surface
+    # This loads the enemy sprite, but doesn't render it yet (source:
+    # https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
+    # EDIT LATER, since I'm using a PLACEHOLDER sprite.
+    enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png').convert_alpha()
+
+    # This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
+    enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
+
+    # Text surfaces and rectangles.
+
+    # Surface for the Battle Messages
+    battle_messages_surface = game_font.render(battle_message, False, 'White')
+    battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(35, 30))  # Battle messages' rectangle
+
+    # Surface for the Playable Character's name
+    playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
+
+    # Playable character's name's rectangle
+    playable_characters_name_rectangle = playable_characters_name_surface.get_rect(center=(360, 440))
+
+    # Surface for the Playable Character's HP (Hit Points / life points)
+    players_hp_surface = game_font.render(f'HP: {players_current_hp}/100', False, 'White')
+
+    # Rectangle for the Player's HP
+    players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
+
+    # Battle Menu UI
+    attack_command_surface = game_font.render('[1]: Attack', False, 'White')  # Attack command's surface
+    attack_command_rectangle = attack_command_surface.get_rect(topleft=(35, 30))  # Attack command's rectangle
+
+    guard_command_surface = game_font.render('[2]: Guard', False, 'White')  # Guard command's surface
+    guard_command_rectangle = guard_command_surface.get_rect(midleft=(35, 80))  # Guard command's rectangle
+
+    potion_command_surface = game_font.render(f'[3]: Use Potion ({players_number_of_potions} remaining)',
+                                              False, 'White')  # Use Potion command
+    potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # Use Potion command's rectangle
+    # End of the Battle Menu UI
+    # End of text surfaces
+
+    while True:  # Infinite loop that will pretty much make the entire game run
+
+        # For any input taken by the user (such as clicking the mouse or closing the window)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # If the user clicks "X" on the window's tab to close the game
+
+                # This will efficiently close the game
+                pygame.quit()
+                exit()
+
+            # If the user presses a key
+            if event.type == pygame.KEYDOWN:
+
+                # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being displayed
+                if event.key == pygame.K_z and display_battle_intro_message:
+                    # This will turn the boolean that displays the "enemy has appeared!" message to "False"
+                    display_battle_intro_message = False
+
+                    # This will let me render the battle menu's UI
+                    display_battle_menu = True
+
+                    # # DEBUG: This should print "False" for the boolean that displays the intro message
+                    # print("Intro message boolean's current state: " + str(display_battle_intro_message))
+
+                if display_battle_menu:  # If the battle menu is being displayed
+
+                    # I will use a match / case to detect which of the 3 battle command keys are being pressed
+                    match event.key:
+
+                        case pygame.K_1:  # If the user presses "1"
+
+                            # This makes the battle menu to disappear so that the battle messages are rendered
+                            display_battle_menu = False
+
+                            # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
+                            # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
+                            # battle_message = "Ludwig attacks the enemy!"
+                            # game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+                            # This updates the battle message to indicate that the player attacked the enemy
+                            battle_message = "Ludwig attacks the enemy!"
+
+                            # DEBUG: print "you attacked"
+                            print("Ludwig attacks the enemy!")
+
+                        case pygame.K_2:  # If the user presses "2"
+
+                            # This makes the battle menu to disappear so that the battle messages are rendered
+                            display_battle_menu = False
+
+                            # This updates the battle message to indicate that you're guarding
+                            battle_message = "Ludwig is on guard!"
+
+                            # DEBUG: print "you are on guard"
+                            print("Ludwig is on guard!")
+
+                        case pygame.K_3:  # if the user presses "3"
+
+                            # This makes the battle menu to disappear so that the battle messages are rendered
+                            display_battle_menu = False
+
+                            # This updates the battle message to indicate that you're drinking a potion
+                            battle_message = "Ludwig drank a potion! You have recovered 30 points of HP!"
+
+                            # This reduces the number of potions that you have by 1
+                            players_number_of_potions = players_number_of_potions - 1
+
+                            # DEBUG: print "you have drank a potion"
+                            print("Ludwig drank a potion! You have recovered 30 points of HP!")
+                            # This prints how many potions you have remaining
+                            print(f"Now, you have {players_number_of_potions} potions left.")
+
+        # If no input is detected by the user (if they don't click nor press any keys), this will execute
+
+        # This renders the sprites
+
+        # This renders the enemy's sprite. The position will be rendered with a rectangle.
+        game_window.blit(enemy_surface, enemy_rectangle)
+
+        # Battle Messages' UI.
+
+        # White rectangle. This will act as a border for a black box that will contain the battle messages.
+        # In the last 4 parameters, I will first specify the X and Y coordinates, and then the width and the height.
+        pygame.draw.rect(game_window, 'White', ((20, 15), (680, 160)))
+
+        # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
+        pygame.draw.rect(game_window, 'Black', ((30, 25), (660, 140)))
+
+        if display_battle_menu:  # If the boolean that lets me render the battle menu is true
+
+            # Show the battle menu
+            game_window.blit(attack_command_surface, attack_command_rectangle)  # Render the "attack" command
+            game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
+            game_window.blit(potion_command_surface, potion_command_rectangle)  # Render the "use potion" command
+
+
+        else:  # If the battle menu is set to False, render the battle messages
+
+            # This should overwrite the battle message surface with the new battle message after any action in the game.
+            battle_messages_surface = game_font.render(battle_message, False, 'White')
+
+            # This renders the text for the current battle message
+            game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+        # END OF THE SNIPPET THAT I NEED TO REACTIVATE LATER.
+
+        # End of the Battle Messages' UI.
+
+        # Player's UI.
+        # White rectangle. This will act as a border for a black box / rectangle that will contain the player's stats.
+        # I'll look up Pygame's documentation to learn how to draw a box / rectangle with custom dimensions.
+        pygame.draw.rect(game_window, 'White', ((260, 400), (200, 160)))
+
+        # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
+        pygame.draw.rect(game_window, 'Black', ((270, 410), (180, 140)))
+
+        # pygame.Rect((360, 280), (200, 50))
+
+        # This render's the playable character's name. It should be in the horizontal center, and below the enemy.
+        game_window.blit(playable_characters_name_surface, playable_characters_name_rectangle)
+        game_window.blit(players_hp_surface, players_hp_rectangle)  # Player's current HP
+        # End of the Player's UI.
+
+        # This should render the game's window, and every sprite
+        pygame.display.update()
+
+    # End of the snippet that renders a black screen once you execute a pygame game (source:
+    # https://youtu.be/AY9MnQ4x3zk?si=28DorTag9IRSrUi3&t=1099)
+
 
 """ Display battle message() function.
 
@@ -313,145 +469,11 @@ def display_battle_message():
     return 1
 
 
-""" Infinite loop that will render the game.
 
-I could later on use a “match / case” so that, depending on the button that you pressed (“1”, “2”, or “3”), I will do 
-the selected command (I will either attack, defend, or heal).
 
-My plan worked! If I update the surface variable for the battle message (which contains the battle message), and then I 
-try to render the battle message via using blit(), the “battle message” variable will be updated with the modified 
-battle message. In my case, i’m updating the “battle message” variable to “you have attacked the enemy!” if you press 
-the “1” key. Then further down the “while true” loop, if the “display battle menu” boolean is false (the battle menu 
-isn’t being rendered), when I render the surface of the battle message by using blit(), I re-create the surface for the 
-battle message. Otherwise, the “battle message” variable inserted as the 1st parameter of the surface will eb the one 
-declared before the “while true” loop, which, at that point, is “an enemy has appeared!”
+
+""" This lets me use the main function if I import this script as a library without any issues (source: my 
+"Shirtificate" assignment from Week 8 from my 2025 homework assignment submission for Harvard's CS50 Python's course).
 """
-while True:  # Infinite loop that will pretty much make the entire game run
-
-    # For any input taken by the user (such as clicking the mouse or closing the window)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:  # If the user clicks "X" on the window's tab to close the game
-
-            # This will efficiently close the game
-            pygame.quit()
-            exit()
-
-        # If the user presses a key
-        if event.type == pygame.KEYDOWN:
-
-            # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being displayed
-            if event.key == pygame.K_z and display_battle_intro_message:
-                # This will turn the boolean that displays the "enemy has appeared!" message to "False"
-                display_battle_intro_message = False
-
-                # This will let me render the battle menu's UI
-                display_battle_menu = True
-
-                # # DEBUG: This should print "False" for the boolean that displays the intro message
-                # print("Intro message boolean's current state: " + str(display_battle_intro_message))
-
-            if display_battle_menu:  # If the battle menu is being displayed
-
-                # I will use a match / case to detect which of the 3 battle command keys are being pressed
-                match event.key:
-
-                    case pygame.K_1:  # If the user presses "1"
-
-                        # This makes the battle menu to disappear so that the battle messages are rendered
-                        display_battle_menu = False
-
-                        # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
-                        # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
-                        # battle_message = "Ludwig attacks the enemy!"
-                        # game_window.blit(battle_messages_surface, battle_messages_rectangle)
-
-                        # This updates the battle message to indicate that the player attacked the enemy
-                        battle_message = "Ludwig attacks the enemy!"
-
-
-                        # DEBUG: print "you attacked"
-                        print("Ludwig attacks the enemy!")
-
-                    case pygame.K_2:  # If the user presses "2"
-
-                        # This makes the battle menu to disappear so that the battle messages are rendered
-                        display_battle_menu = False
-
-                        # This updates the battle message to indicate that you're guarding
-                        battle_message = "Ludwig is on guard!"
-
-                        # DEBUG: print "you are on guard"
-                        print("Ludwig is on guard!")
-
-                    case pygame.K_3:  # if the user presses "3"
-
-                        # This makes the battle menu to disappear so that the battle messages are rendered
-                        display_battle_menu = False
-
-                        # This updates the battle message to indicate that you're drinking a potion
-                        battle_message = "Ludwig drank a potion! You have recovered 30 points of HP!"
-
-                        # This reduces the number of potions that you have by 1
-                        players_number_of_potions = players_number_of_potions - 1
-
-                        # DEBUG: print "you have drank a potion"
-                        print("Ludwig drank a potion! You have recovered 30 points of HP!")
-                        # This prints how many potions you have remaining
-                        print(f"Now, you have {players_number_of_potions} potions left.")
-
-    # If no input is detected by the user (if they don't click nor press any keys), this will execute
-
-    # This renders the sprites
-
-    # This renders the enemy's sprite. The position will be rendered with a rectangle.
-    game_window.blit(enemy_surface, enemy_rectangle)
-
-    # Battle Messages' UI.
-
-    # White rectangle. This will act as a border for a black box that will contain the battle messages.
-    # In the last 4 parameters, I will first specify the X and Y coordinates, and then the width and the height.
-    pygame.draw.rect(game_window, 'White', ((20, 15), (680, 160)))
-
-    # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
-    pygame.draw.rect(game_window, 'Black', ((30, 25), (660, 140)))
-
-    if display_battle_menu:  # If the boolean that lets me render the battle menu is true
-
-        # Show the battle menu
-        game_window.blit(attack_command_surface, attack_command_rectangle)  # Render the "attack" command
-        game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
-        game_window.blit(potion_command_surface, potion_command_rectangle)  # Render the "use potion" command
-
-
-    else:  # If the battle menu is set to False, render the battle messages
-
-        # This should overwrite the battle message surface with the new battle message after any action in the game.
-        battle_messages_surface = game_font.render(battle_message, False, 'White')
-
-        # This renders the text for the current battle message
-        game_window.blit(battle_messages_surface, battle_messages_rectangle)
-
-    # END OF THE SNIPPET THAT I NEED TO REACTIVATE LATER.
-
-    # End of the Battle Messages' UI.
-
-    # Player's UI.
-    # White rectangle. This will act as a border for a black box / rectangle that will contain the player's stats.
-    # I'll look up Pygame's documentation to learn how to draw a box / rectangle with custom dimensions.
-    pygame.draw.rect(game_window, 'White', ((260, 400), (200, 160)))
-
-    # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
-    pygame.draw.rect(game_window, 'Black', ((270, 410), (180, 140)))
-
-    # pygame.Rect((360, 280), (200, 50))
-
-    # This render's the playable character's name. It should be in the horizontal center, and below the enemy.
-    game_window.blit(playable_characters_name_surface, playable_characters_name_rectangle)
-    game_window.blit(players_hp_surface, players_hp_rectangle)  # Player's current HP
-    # End of the Player's UI.
-
-    # This should render the game's window, and every sprite
-    pygame.display.update()
-
-# End of the snippet that renders a black screen once you execute a pygame game (source:
-# https://youtu.be/AY9MnQ4x3zk?si=28DorTag9IRSrUi3&t=1099)
+if __name__ == "__main__":
+    main()
