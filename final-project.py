@@ -357,7 +357,7 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
                     case pygame.K_1:  # If the user presses "1"
 
-                        # Thi makes the battle menu to disappear so that the battle messages are rendered
+                        # This makes the battle menu to disappear so that the battle messages are rendered
                         display_battle_menu = False
 
                         # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
@@ -365,6 +365,7 @@ while True:  # Infinite loop that will pretty much make the entire game run
                         # battle_message = "Ludwig attacks the enemy!"
                         # game_window.blit(battle_messages_surface, battle_messages_rectangle)
 
+                        # This updates the battle message to indicate that the player attacked the enemy
                         battle_message = "Ludwig attacks the enemy!"
 
 
@@ -373,13 +374,25 @@ while True:  # Infinite loop that will pretty much make the entire game run
 
                     case pygame.K_2:  # If the user presses "2"
 
+                        # This makes the battle menu to disappear so that the battle messages are rendered
+                        display_battle_menu = False
+
+                        # This updates the battle message to indicate that you're guarding
+                        battle_message = "Ludwig is on guard!"
+
                         # DEBUG: print "you are on guard"
                         print("Ludwig is on guard!")
 
                     case pygame.K_3:  # if the user presses "3"
 
+                        # This makes the battle menu to disappear so that the battle messages are rendered
+                        display_battle_menu = False
+
+                        # This updates the battle message to indicate that you're drinking a potion
+                        battle_message = "Ludwig drank a potion! You have recovered 30 points of HP!"
+
                         # DEBUG: print "you have drank a potion"
-                        print("Ludwig drank a potion! you have recovered 30 points of HP!")
+                        print("Ludwig drank a potion! You have recovered 30 points of HP!")
 
     # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
@@ -404,7 +417,7 @@ while True:  # Infinite loop that will pretty much make the entire game run
         game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
         game_window.blit(potion_command_surface, potion_command_rectangle)  # Render the "use potion" command
 
-    # REACTIVATE LATER?
+
     else:  # If the battle menu is set to False, render the battle messages
 
         # This should overwrite the battle message surface with the new battle message after any action in the game.
