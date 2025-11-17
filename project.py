@@ -256,63 +256,6 @@ game_window = pygame.display.set_mode((720, 576))
 # This will add the game's title to the window's tab
 pygame.display.set_caption("Gold Standard")
 
-# This specifies the font that I will use, and its size. At least, I'll use this for the playable character's name.
-game_font = pygame.font.Font(None, 32)
-players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
-players_number_of_potions = 5  # Initial number of potions that the player has.
-
-battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
-battle_message_2 = ""  # If I need to add a second line of text to avoid text from overflowing the dialogue box.
-display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
-display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
-
-# Sprites and surface
-# This loads the enemy sprite, but doesn't render it yet (source:
-# https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
-# EDIT LATER, since I'm using a PLACEHOLDER sprite.
-enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png').convert_alpha()
-
-# This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
-enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
-
-# Text surfaces and rectangles.
-
-# Surface for the Battle Messages
-battle_messages_surface = game_font.render(battle_message, False, 'White')
-battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(35, 30))  # Battle messages' rectangle
-battle_messages_2_rectangle = battle_messages_surface.get_rect(topleft=(35, 65))  # Battle message 2's rectangle
-
-# Surface for the Playable Character's name
-playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
-
-# Playable character's name's rectangle
-playable_characters_name_rectangle = playable_characters_name_surface.get_rect(center=(360, 440))
-
-# Surface for the Playable Character's HP (Hit Points / life points)
-players_hp_surface = game_font.render(f'HP: {players_current_hp}/100', False, 'White')
-
-# Rectangle for the Player's HP
-players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
-
-# Battle Menu UI
-attack_command_surface = game_font.render('[1]: Attack', False, 'White')  # Attack command's surface
-attack_command_rectangle = attack_command_surface.get_rect(topleft=(35, 30))  # Attack command's rectangle
-
-guard_command_surface = game_font.render('[2]: Guard', False, 'White')  # Guard command's surface
-guard_command_rectangle = guard_command_surface.get_rect(midleft=(35, 80))  # Guard command's rectangle
-
-potion_command_surface = game_font.render(f'[3]: Use Potion ({players_number_of_potions} remaining)',
-                                          False, 'White')  # Use Potion command
-potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # Use Potion command's rectangle
-# End of the Battle Menu UI
-# End of text surfaces
-
-# Booleans that keep track of the player and the enemy's turns
-has_player_attacked = False  # This tells me if the player selected the "Attack" command
-is_players_turn = True  # This tells me if the current turn is the player's turn
-is_enemys_turn = False  # This tells me if the current turn is the enemy's turn.
-did_enemy_use_regular_attack = False    # This tells me if the enemy used a normal attack
-
 """ Class that stores the properties for each character (both the player and the enemy).
 
 Now, I could consider creating the Character class so that I can store the character’s name, HP, and attack points by 
@@ -367,6 +310,63 @@ enemy = Character("Hostile Robot Leader", 500, 10)
 # # DEBUG: this should print me the properties of the playable character
 # print("Player's stats: ")
 # print(str(player))
+
+# This specifies the font that I will use, and its size. At least, I'll use this for the playable character's name.
+game_font = pygame.font.Font(None, 32)
+players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
+players_number_of_potions = 5  # Initial number of potions that the player has.
+
+battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
+battle_message_2 = ""  # If I need to add a second line of text to avoid text from overflowing the dialogue box.
+display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
+display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
+
+# Sprites and surface
+# This loads the enemy sprite, but doesn't render it yet (source:
+# https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
+# EDIT LATER, since I'm using a PLACEHOLDER sprite.
+enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png').convert_alpha()
+
+# This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
+enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
+
+# Text surfaces and rectangles.
+
+# Surface for the Battle Messages
+battle_messages_surface = game_font.render(battle_message, False, 'White')
+battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(35, 30))  # Battle messages' rectangle
+battle_messages_2_rectangle = battle_messages_surface.get_rect(topleft=(35, 65))  # Battle message 2's rectangle
+
+# Surface for the Playable Character's name
+playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
+
+# Playable character's name's rectangle
+playable_characters_name_rectangle = playable_characters_name_surface.get_rect(center=(360, 440))
+
+# Surface for the Playable Character's HP (Hit Points / life points)
+players_hp_surface = game_font.render(f'HP: {player.health_points}/100', False, 'White')
+
+# Rectangle for the Player's HP
+players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
+
+# Battle Menu UI
+attack_command_surface = game_font.render('[1]: Attack', False, 'White')  # Attack command's surface
+attack_command_rectangle = attack_command_surface.get_rect(topleft=(35, 30))  # Attack command's rectangle
+
+guard_command_surface = game_font.render('[2]: Guard', False, 'White')  # Guard command's surface
+guard_command_rectangle = guard_command_surface.get_rect(midleft=(35, 80))  # Guard command's rectangle
+
+potion_command_surface = game_font.render(f'[3]: Use Potion ({players_number_of_potions} remaining)',
+                                          False, 'White')  # Use Potion command
+potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # Use Potion command's rectangle
+# End of the Battle Menu UI
+# End of text surfaces
+
+# Booleans that keep track of the player and the enemy's turns
+has_player_attacked = False  # This tells me if the player selected the "Attack" command
+is_players_turn = True  # This tells me if the current turn is the player's turn
+is_enemys_turn = False  # This tells me if the current turn is the enemy's turn.
+did_enemy_use_regular_attack = False  # This tells me if the enemy used a normal attack
 
 # Functions / methods.
 
@@ -458,6 +458,7 @@ def main():
     global is_players_turn
     global is_enemys_turn
     global did_enemy_use_regular_attack
+    global players_hp_surface
 
     # End of the Global Variables
 
@@ -593,7 +594,7 @@ def main():
 
                         # The dialogue box shows you that the enemy is attacking the player
                         battle_message = f"The {enemy.name} attacks you!"
-                        battle_message_2 = ""   # Second line of the battle message (empty)
+                        battle_message_2 = ""  # Second line of the battle message (empty)
 
                         # This will render the message with the enemy deling damage with a regular attack
                         did_enemy_use_regular_attack = True
@@ -614,6 +615,9 @@ def main():
                         # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
                         player.health_points = player.health_points - randomly_generated_damage_output
 
+                        # Updating the Player's HP in the UI
+                        players_hp_surface = game_font.render(f'HP: {player.health_points}/100', False, 'White')
+
                         # DEBUG: This tells me how many HP points the enemy has after being attacked
                         print("Your HP points left: " + str(player.health_points))
 
@@ -626,7 +630,6 @@ def main():
 
                         # # This will display the battle menu after the enemy attacks the player
                         # display_battle_menu = True
-
 
         # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
