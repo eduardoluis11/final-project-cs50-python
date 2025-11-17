@@ -237,6 +237,8 @@ import pygame
 
 from sys import exit  # If I want to exit the game properly, I'll use sys.exit()
 
+import random
+
 # I will import "random" and "randomint" so that the characters do random amounts of damage based on their base attack
 from random import randint
 
@@ -396,7 +398,10 @@ I could make a function for the player’s turn, another one for the enemy’s t
 that you or the enemy will make (since it will be random, but based on the attack points of each character); and one 
 for determining if you won. I could make another one for displaying a game over screen if you get killed.
 
-I’ll make the first variables into global variables, since I need to sue them in multiple functions. To work with a global variable in any of my functions, i need to type “global”, and then I should put the name of the global variable that I’m trying to access to right after it (source: David Malan’s “Etcetera” lecture from CS50 Python at https://youtu.be/6pgodt1mezg?si=OxrGP1zD_d6kUBae&t=964 ).
+I’ll make the first variables into global variables, since I need to sue them in multiple functions. To work with a 
+global variable in any of my functions, i need to type “global”, and then I should put the name of the global variable 
+that I’m trying to access to right after it (source: David Malan’s “Etcetera” lecture from CS50 Python at 
+https://youtu.be/6pgodt1mezg?si=OxrGP1zD_d6kUBae&t=964 ).
 
 That is, IF I need to use global variables to begin with.
 
@@ -413,7 +418,7 @@ without actually reducing the enemy’s hit points. Then, I will use the random 
 damage between +10 and -10 points from their base attack points (i.e: that the player can do between 10 and 30 points 
 of damage if their base attack points are 20).
 
-I will need to find a way to create multi-line dialogues in pygame. And no: using “\n” didn’t work. I need to find a 
+I will need to find a way to create multi-line dialogues in pygame. And no: using “n” didn’t work. I need to find a 
 way to either render a proper line-break while rendering the text surface; or render the string surface twice, but by 
 using slice() to first render the first half of the dialogue, and then using slice from the second half of the dialogue. 
 That, or I could make another variable called “battle_message_2”, which would store the 2nd half of the dialogue there 
@@ -422,7 +427,11 @@ message 2” variable and hard-coding the text that would go into it would be th
 most efficient one. I would need to render this new battle message variable’s surface right below the first battle 
 message. I would also need to declare and leave empty the “battle message 2” variable as a global variable.
 
-
+I will use "random.randint(smallest_number, largest_number)" to randomly generate the damage output from each
+character, so that their attacks always deal random damage to add variety to the gameplay (source: Clear Code on 
+YouTube at https://youtu.be/AY9MnQ4x3zk?si=mfCvPMEh2o7MNjM0). However, the damage output
+won't be 100% random. It will be based on the character's base damage. For instance, the attack could be either 10 
+points lower or 10 times higher than the character's base damage. 
 """
 
 
@@ -537,14 +546,22 @@ def main():
 
                         # If the player chose "Attack" and presses the confirmation key.
                         if has_player_attacked and event.key == pygame.K_z:
+
+                            # This randomly calculates the damage that the player can do to the enemy (from -10 to 10)
+                            randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
+
                             # This shows how much damage you've dealt to the enemy
-                            battle_message = f"{player.name} has dealt {player.attack_points} points of damage"
+                            battle_message = (f"{player.name} has dealt {randomly_generated_damage_output} points of "
+                                              f"damage")
+
+                            # battle_message = f"{player.name} has dealt {player.attack_points} points of damage"
 
                             # Second line of text to prevent the text from getting outside the dialogue box
                             battle_message_2 = f"to the {enemy.name}!"
 
-                            # This should reduce the enemy's HP from the player's attack
-                            enemy.health_points = enemy.health_points - player.attack_points
+                            # This should reduce the enemy's HP from the player's attack.
+                            # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
+                            enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
                             # DEBUG: This tells me how many HP points the enemy has after being attacked
                             print("Enemy's HP points left: " + str(enemy.health_points))
