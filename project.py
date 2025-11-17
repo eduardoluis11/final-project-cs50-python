@@ -229,12 +229,16 @@ super attack, or wasting a turn).
 
 6) The entire loop would be repeated.
 
-
+To import the "randint" library, I need to import it form the "random" library (source: Clear Code on YouTube at
+https://youtu.be/AY9MnQ4x3zk?si=mfCvPMEh2o7MNjM0).
 """
 
 import pygame
 
 from sys import exit  # If I want to exit the game properly, I'll use sys.exit()
+
+# I will import "random" and "randomint" so that the characters do random amounts of damage based on their base attack
+from random import randint
 
 # # Class which will store the characters' Health Points and Attack Points as properties
 # class Character:
@@ -321,6 +325,9 @@ return each property of it (source: my "Cookie Jar" 2025 Homework submission fro
 course.)
 
 I’m properly adding and creating the main character by using the Character class by using object oriented programming.
+
+I created both the player and the enemy as global variables since I want to access the player and the enemy's 
+properties in all of my functions, be it on main(), or be it in the other 3 functions that i need to create.
 """
 
 
@@ -398,6 +405,12 @@ attacks!” message shows up.
 
 It would be a good idea to make 2 new booleans: one for keeping track if it’s your turn, and another one for keeping 
 track if it’s the enemy’s turn. That will make things much easier for me.
+
+Now, I want to actually reduce the enemy’s HP by 15 when the player hits him. I don’t want to hard code a message 
+without actually reducing the enemy’s hit points. Then, I will use the random library so that the player can do random 
+damage between +10 and -10 points from their base attack points (i.e: that the player can do between 10 and 30 points 
+of damage if their base attack points are 20).
+
 """
 
 
@@ -456,7 +469,7 @@ def main():
                             battle_message = "Ludwig attacks the enemy!"
 
                             # DEBUG: print "you attacked"
-                            print("Ludwig attacks the enemy!")
+                            print(f"{player.name} attacks the enemy!")
 
                             # This tells me that the player just selected the "attack" command
                             has_player_attacked = True
@@ -512,7 +525,8 @@ def main():
                         # If the player chose "Attack" and presses the confirmation key.
                         if has_player_attacked and event.key == pygame.K_z:
                             # This shows how much damage you've dealt to the enemy
-                            battle_message = "You've dealt 15 points of damage to the enemy!"
+                            battle_message = (f"{player.name} has dealt {player.attack_points} points of damage to "
+                                              f"the {enemy.name}!")
 
                             # Now, the enemy's turn begins. The player's turn ents
                             is_players_turn = False
