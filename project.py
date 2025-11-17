@@ -549,34 +549,34 @@ def main():
 
                     else:  # If I'm no longer rendering the battle menu, and I'm rendering battle messages
 
-                        # If the user presses a key
-                        if event.type == pygame.KEYDOWN:
+                        # # If the user presses a key
+                        # if event.type == pygame.KEYDOWN:
 
-                            # If the player chose "Attack" and presses the confirmation key.
-                            if has_player_attacked and event.key == pygame.K_z:
-                                # This randomly calculates the damage that the player can do to the enemy (from -10 to 10)
-                                randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
+                        # If the player chose "Attack" and presses the confirmation key.
+                        if has_player_attacked and event.key == pygame.K_z:
+                            # This randomly calculates the damage that the player can do to the enemy (from -10 to 10)
+                            randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
 
-                                # This shows how much damage you've dealt to the enemy
-                                battle_message = (
-                                    f"{player.name} has dealt {randomly_generated_damage_output} points of "
-                                    f"damage")
+                            # This shows how much damage you've dealt to the enemy
+                            battle_message = (
+                                f"{player.name} has dealt {randomly_generated_damage_output} points of "
+                                f"damage")
 
-                                # battle_message = f"{player.name} has dealt {player.attack_points} points of damage"
+                            # battle_message = f"{player.name} has dealt {player.attack_points} points of damage"
 
-                                # Second line of text to prevent the text from getting outside the dialogue box
-                                battle_message_2 = f"to the {enemy.name}!"
+                            # Second line of text to prevent the text from getting outside the dialogue box
+                            battle_message_2 = f"to the {enemy.name}!"
 
-                                # This should reduce the enemy's HP from the player's attack.
-                                # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
-                                enemy.health_points = enemy.health_points - randomly_generated_damage_output
+                            # This should reduce the enemy's HP from the player's attack.
+                            # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
+                            enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
-                                # DEBUG: This tells me how many HP points the enemy has after being attacked
-                                print("Enemy's HP points left: " + str(enemy.health_points))
+                            # DEBUG: This tells me how many HP points the enemy has after being attacked
+                            print("Enemy's HP points left: " + str(enemy.health_points))
 
-                                # Now, the enemy's turn begins. The player's turn ents
-                                is_players_turn = False
-                                is_enemys_turn = True
+                            # Now, the enemy's turn begins. The player's turn ents
+                            is_players_turn = False
+                            is_enemys_turn = True
 
                 elif is_enemys_turn:  # If it's the enemy's turn
 
