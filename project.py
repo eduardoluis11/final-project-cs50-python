@@ -543,6 +543,12 @@ def main():
                             # Second line of text to prevent the text from getting outside the dialogue box
                             battle_message_2 = f"to the {enemy.name}!"
 
+                            # This should reduce the enemy's HP from the player's attack
+                            enemy.health_points = enemy.health_points - player.attack_points
+
+                            # DEBUG: This tells me how many HP points the enemy has after being attacked
+                            print("Enemy's HP points left: " + str(enemy.health_points))
+
                             # Now, the enemy's turn begins. The player's turn ents
                             is_players_turn = False
                             is_enemys_turn = True
