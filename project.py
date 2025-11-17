@@ -262,7 +262,7 @@ players_current_hp = 100  # This stores the current HP for the player. This goes
 players_number_of_potions = 5  # Initial number of potions that the player has.
 
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
-battle_message_2 = ""   # If I need to add a second line of text to avoid text from overflowing the dialogue box.
+battle_message_2 = ""  # If I need to add a second line of text to avoid text from overflowing the dialogue box.
 display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
 display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
 
@@ -432,6 +432,11 @@ character, so that their attacks always deal random damage to add variety to the
 YouTube at https://youtu.be/AY9MnQ4x3zk?si=mfCvPMEh2o7MNjM0). However, the damage output
 won't be 100% random. It will be based on the character's base damage. For instance, the attack could be either 10 
 points lower or 10 times higher than the character's base damage. 
+
+Let’s see: now, let’s create the enemy’s turn. To do that, let’s first make the enemy render a battle message that 
+says “the enemy attacks the player!”. This message should show up right after the player’s turn ends (be it for 
+attacking, be it for guarding, or be it from drinking a potion). It's pointless to check if the battle menu is
+being rendered during the enemy's turn, since the battle menu will never be rendered on the enemy's turn.
 """
 
 
@@ -461,114 +466,125 @@ def main():
             # If the user presses a key
             if event.type == pygame.KEYDOWN:
 
-                # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being displayed
-                if event.key == pygame.K_z and display_battle_intro_message:
-                    # This will turn the boolean that displays the "enemy has appeared!" message to "False"
-                    display_battle_intro_message = False
+                # If it's the player's turn
+                if is_players_turn:
 
-                    # This will let me render the battle menu's UI
-                    display_battle_menu = True
+                    # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being displayed
+                    if event.key == pygame.K_z and display_battle_intro_message:
+                        # This will turn the boolean that displays the "enemy has appeared!" message to "False"
+                        display_battle_intro_message = False
 
-                    # # DEBUG: This should print "False" for the boolean that displays the intro message
-                    # print("Intro message boolean's current state: " + str(display_battle_intro_message))
+                        # This will let me render the battle menu's UI
+                        display_battle_menu = True
 
-                if display_battle_menu:  # If the battle menu is being displayed
+                        # # DEBUG: This should print "False" for the boolean that displays the intro message
+                        # print("Intro message boolean's current state: " + str(display_battle_intro_message))
 
-                    # I will use a match / case to detect which of the 3 battle command keys are being pressed
-                    match event.key:
+                    if display_battle_menu:  # If the battle menu is being displayed
 
-                        case pygame.K_1:  # If the user presses "1"
+                        # I will use a match / case to detect which of the 3 battle command keys are being pressed
+                        match event.key:
 
-                            # This makes the battle menu to disappear so that the battle messages are rendered
-                            display_battle_menu = False
+                            case pygame.K_1:  # If the user presses "1"
 
-                            # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
-                            # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
-                            # battle_message = "Ludwig attacks the enemy!"
-                            # game_window.blit(battle_messages_surface, battle_messages_rectangle)
+                                # This makes the battle menu to disappear so that the battle messages are rendered
+                                display_battle_menu = False
 
-                            # This updates the battle message to indicate that the player attacked the enemy
-                            battle_message = "Ludwig attacks the enemy!"
+                                # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
+                                # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
+                                # battle_message = "Ludwig attacks the enemy!"
+                                # game_window.blit(battle_messages_surface, battle_messages_rectangle)
 
-                            # DEBUG: print "you attacked"
-                            print(f"{player.name} attacks the enemy!")
+                                # This updates the battle message to indicate that the player attacked the enemy
+                                battle_message = f"{player.name} attacks the {enemy.name}!"
 
-                            # This tells me that the player just selected the "attack" command
-                            has_player_attacked = True
+                                # DEBUG: print "you attacked"
+                                print(f"{player.name} attacks the enemy!")
 
-                            # DEBUG: This tells me what the current value of the "has player attacked" boolean
-                            print("has player attacked boolean value: " + str(has_player_attacked))
+                                # This tells me that the player just selected the "attack" command
+                                has_player_attacked = True
 
-                            # # This should stop the "for event" loop (source: w3schools at
-                            # # https://www.w3schools.com/python/ref_keyword_continue.asp).
-                            # break
+                                # DEBUG: This tells me what the current value of the "has player attacked" boolean
+                                print("has player attacked boolean value: " + str(has_player_attacked))
 
-                            # # If you press the "confirmation" key again ("Z"), a new battle message will show up
-                            # if event.key == pygame.K_z:
-                            #     # This shows how much damage you've dealt to the enemy
-                            #     battle_message = "You've dealt 15 points of damage to the enemy!"
+                                # # This should stop the "for event" loop (source: w3schools at
+                                # # https://www.w3schools.com/python/ref_keyword_continue.asp).
+                                # break
 
-                        case pygame.K_2:  # If the user presses "2"
+                                # # If you press the "confirmation" key again ("Z"), a new battle message will show up
+                                # if event.key == pygame.K_z:
+                                #     # This shows how much damage you've dealt to the enemy
+                                #     battle_message = "You've dealt 15 points of damage to the enemy!"
 
-                            # This makes the battle menu to disappear so that the battle messages are rendered
-                            display_battle_menu = False
+                            case pygame.K_2:  # If the user presses "2"
 
-                            # This updates the battle message to indicate that you're guarding
-                            battle_message = "Ludwig is on guard!"
+                                # This makes the battle menu to disappear so that the battle messages are rendered
+                                display_battle_menu = False
 
-                            # DEBUG: print "you are on guard"
-                            print("Ludwig is on guard!")
+                                # This updates the battle message to indicate that you're guarding
+                                battle_message = "Ludwig is on guard!"
 
-                            # Your turn ends, and the enemy's turn begins
-                            is_players_turn = False
-                            is_enemys_turn = True
+                                # DEBUG: print "you are on guard"
+                                print("Ludwig is on guard!")
 
-                        case pygame.K_3:  # if the user presses "3"
+                                # Your turn ends, and the enemy's turn begins
+                                is_players_turn = False
+                                is_enemys_turn = True
 
-                            # This makes the battle menu to disappear so that the battle messages are rendered
-                            display_battle_menu = False
+                            case pygame.K_3:  # if the user presses "3"
 
-                            # This updates the battle message to indicate that you're drinking a potion
-                            battle_message = "Ludwig drank a potion! You have recovered 30 points of HP!"
+                                # This makes the battle menu to disappear so that the battle messages are rendered
+                                display_battle_menu = False
 
-                            # This reduces the number of potions that you have by 1
-                            players_number_of_potions = players_number_of_potions - 1
+                                # This updates the battle message to indicate that you're drinking a potion
+                                battle_message = "Ludwig drank a potion! You have recovered 30 points of HP!"
 
-                            # DEBUG: print "you have drank a potion"
-                            print("Ludwig drank a potion! You have recovered 30 points of HP!")
-                            # This prints how many potions you have remaining
-                            print(f"Now, you have {players_number_of_potions} potions left.")
+                                # This reduces the number of potions that you have by 1
+                                players_number_of_potions = players_number_of_potions - 1
 
-                else:  # If I'm no longer rendering the battle menu, and I'm rendering battle messages
+                                # DEBUG: print "you have drank a potion"
+                                print("Ludwig drank a potion! You have recovered 30 points of HP!")
+                                # This prints how many potions you have remaining
+                                print(f"Now, you have {players_number_of_potions} potions left.")
 
-                    # If the user presses a key
-                    if event.type == pygame.KEYDOWN:
+                    else:  # If I'm no longer rendering the battle menu, and I'm rendering battle messages
 
-                        # If the player chose "Attack" and presses the confirmation key.
-                        if has_player_attacked and event.key == pygame.K_z:
+                        # If the user presses a key
+                        if event.type == pygame.KEYDOWN:
 
-                            # This randomly calculates the damage that the player can do to the enemy (from -10 to 10)
-                            randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
+                            # If the player chose "Attack" and presses the confirmation key.
+                            if has_player_attacked and event.key == pygame.K_z:
+                                # This randomly calculates the damage that the player can do to the enemy (from -10 to 10)
+                                randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
 
-                            # This shows how much damage you've dealt to the enemy
-                            battle_message = (f"{player.name} has dealt {randomly_generated_damage_output} points of "
-                                              f"damage")
+                                # This shows how much damage you've dealt to the enemy
+                                battle_message = (
+                                    f"{player.name} has dealt {randomly_generated_damage_output} points of "
+                                    f"damage")
 
-                            # battle_message = f"{player.name} has dealt {player.attack_points} points of damage"
+                                # battle_message = f"{player.name} has dealt {player.attack_points} points of damage"
 
-                            # Second line of text to prevent the text from getting outside the dialogue box
-                            battle_message_2 = f"to the {enemy.name}!"
+                                # Second line of text to prevent the text from getting outside the dialogue box
+                                battle_message_2 = f"to the {enemy.name}!"
 
-                            # This should reduce the enemy's HP from the player's attack.
-                            # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
-                            enemy.health_points = enemy.health_points - randomly_generated_damage_output
+                                # This should reduce the enemy's HP from the player's attack.
+                                # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
+                                enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
-                            # DEBUG: This tells me how many HP points the enemy has after being attacked
-                            print("Enemy's HP points left: " + str(enemy.health_points))
+                                # DEBUG: This tells me how many HP points the enemy has after being attacked
+                                print("Enemy's HP points left: " + str(enemy.health_points))
 
-                            # Now, the enemy's turn begins. The player's turn ents
-                            is_players_turn = False
-                            is_enemys_turn = True
+                                # Now, the enemy's turn begins. The player's turn ents
+                                is_players_turn = False
+                                is_enemys_turn = True
+
+                elif is_enemys_turn:  # If it's the enemy's turn
+
+                    if event.key == pygame.K_z:  # If the user presses the confirmation key
+
+                        # The dialogue box shows you that the enemy is attacking the player
+                        battle_message = f"The {enemy.name} attacks {player.name}!"
+                        battle_message_2 = ""   # Second line of the battle message (empty)
 
         # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
