@@ -444,6 +444,20 @@ the enemy did to the player.
 
 Note: to simplify things, and to avoid confusion, instead of printing the player’s name, I will print “you” in the 
 battle messages. You only have 1 party member, after all. 
+
+The battle can keep going on and on, correctly switching between the player’s turn and the enemy’s turn. And it can 
+keep going until the player has negative HP points.
+
+Now the UI is being updated to show that the Player’s HP is being reduced by the enemy’s attack.
+
+Also, after the enemy hits the player, I want to render the battle menu again, since it would start the player’s turn 
+once again. Now, after the enemy finishes attacking you, the battle menu is rendered again during the player’s turn.
+And you can attack again right after hitting “1” in the battle menu! And pressing “Z” in the battle menu doesn’t cause 
+any bugs.
+
+Well, I think that I can now put the winning and the losing conditions. I’ll make it so that, if the player has less or 
+equal to 0, I will render a message that says “You lost all of your HP. Game Over”. Meanwhile, if your enemy’s HP is 
+less or equal to 0, I will render the message “Congrats! You won! You defeated the boss!”
 """
 
 
@@ -474,6 +488,15 @@ def main():
 
             # If the user presses a key
             if event.type == pygame.KEYDOWN:
+
+                # If it's still the enemy's turn, but the battle menu is activated and you press "Z"
+                if is_enemys_turn and display_battle_menu and event.key == pygame.K_z:
+
+                    # I will activate the player's turn, and deactivate the enemy's turn
+                    is_players_turn = True
+                    is_enemys_turn = False
+
+
 
                 # If it's the player's turn
                 if is_players_turn:
@@ -618,8 +641,8 @@ def main():
                         # Updating the Player's HP in the UI
                         players_hp_surface = game_font.render(f'HP: {player.health_points}/100', False, 'White')
 
-                        # DEBUG: This tells me how many HP points the enemy has after being attacked
-                        print("Your HP points left: " + str(player.health_points))
+                        # # DEBUG: This tells me how many HP points the enemy has after being attacked
+                        # print("Your HP points left: " + str(player.health_points))
 
                         # This will let the enemy render the "enemy attacks!" message after the player's turn
                         did_enemy_use_regular_attack = False
@@ -628,8 +651,10 @@ def main():
                         # is_players_turn = True
                         # is_enemys_turn = False
 
-                        # # This will display the battle menu after the enemy attacks the player
-                        # display_battle_menu = True
+                        # This will display the battle menu after the enemy attacks the player
+                        display_battle_menu = True
+
+
 
         # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
@@ -647,7 +672,7 @@ def main():
         # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
         pygame.draw.rect(game_window, 'Black', ((30, 25), (660, 140)))
 
-        if display_battle_menu:  # If the boolean that lets me render the battle menu is true
+        if display_battle_menu and is_players_turn: # If the boolean that lets me render the battle menu is true and if it's the player's turn
 
             # Show the battle menu
             game_window.blit(attack_command_surface, attack_command_rectangle)  # Render the "attack" command
