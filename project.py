@@ -496,12 +496,11 @@ def main():
                     is_players_turn = True
                     is_enemys_turn = False
 
-
-
                 # If it's the player's turn
                 if is_players_turn:
 
-                    # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being displayed
+                    # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being
+                    # displayed.
                     if event.key == pygame.K_z and display_battle_intro_message:
                         # This will turn the boolean that displays the "enemy has appeared!" message to "False"
                         display_battle_intro_message = False
@@ -529,6 +528,8 @@ def main():
 
                                 # This updates the battle message to indicate that the player attacked the enemy
                                 battle_message = f"{player.name} attacks the {enemy.name}!"
+
+                                battle_message_2 = ""  # Second line of the battle message (empty)
 
                                 # DEBUG: print "you attacked"
                                 print(f"{player.name} attacks the enemy!")
@@ -721,6 +722,29 @@ def main():
         #
         #             # This shows how much damage you've dealt to the enemy
         #             battle_message = "You've dealt 15 points of damage to the enemy!"
+
+        # If the player loses all of their health points, show a "Game Over" screen
+        if player.health_points <= 0:
+
+            # I want the player's HP to be equal to 0 if it's a negative number
+            if player.health_points < 0:
+
+                player.health_points = 0
+
+            # I will render "Game Over" in a battle message
+            battle_message = "You've lost all of your Health Points, and became unconscious."
+            battle_message_2 = "GAME OVER"
+
+            # This should overwrite the battle message surface with the new battle message after any action in the game.
+            battle_messages_surface = game_font.render(battle_message, False, 'White')
+
+            # This renders the text for the current battle message
+            game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+            # This renders the second line of text if the text is too long
+            battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
+            game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
+
 
         # This should render the game's window, and every sprite
         pygame.display.update()
