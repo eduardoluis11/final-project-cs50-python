@@ -9,4 +9,12 @@ https://youtu.be/AY9MnQ4x3zk?si=9B4V7m-shu7QLobW .
 Link to Clear Code's GitHub repo, which is where I took the assets, such as sprites,
 to make his runner.py game: https://github.com/clear-code-projects/UltimatePygameIntro .
 
+3) Music done by Alberto Salinas, A.K.A "Nemo", A.K.A "Becktor", A.K.A "ADSReal".
+I got his explicit consent to use one of his tracks. DO NOT USE HIS MUSIC WITHOUT
+HIS PERMISSION.
 
+Track used: ADSReal-"Industrial Disaster" Original Instrumental Song:
+https://soundcloud.com/nemoproducer/adsreal-industrial-disaster?si=4c93760c83084411b80e6e6fc102c211&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing
+
+Link to Alberto Salinas' Soundcloud profile, which is were I got the track that
+I used: https://soundcloud.com/nemoproducer?ref=clipboard&p=a&c=1&si=216b578bd1c1487694ed1d13f270b191&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing
