@@ -299,6 +299,11 @@ potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # 
 # End of the Battle Menu UI
 # End of text surfaces
 
+# Booleans that keep track of the player and the enemy's turns
+has_player_attacked = False  # This tells me if the player selected the "Attack" command
+
+is_players_turn = True  # This tells me if the current turn is the player's turn
+is_enemys_turn = False  # This tells me if the current turn is the enemy's turn.
 
 # Functions / methods.
 
@@ -334,17 +339,23 @@ I’ll make the first variables into global variables, since I need to sue them 
 
 That is, IF I need to use global variables to begin with.
 
+I just want to render a message that says “you’ve dealt (points of damage) points of damage to the enemy” right after 
+selecting “attack”. The battle message that says how much damage you did to the enemy SHOULD APPEAR ONLY after the 
+battle message “the player attacks!” shows up! To do this, I need to insert a new “if” statement after the “the player 
+attacks!” message shows up.
+
+It would be a good idea to make 2 new booleans: one for keeping track if it’s your turn, and another one for keeping 
+track if it’s the enemy’s turn. That will make things much easier for me.
 """
 
 
 def main():
-
-
     # Global variables. This snippet will let me access all the global variables declared.
     global display_battle_intro_message
     global display_battle_menu
     global players_number_of_potions
     global battle_message
+    global has_player_attacked
 
     # End of the Global Variables
 
@@ -393,6 +404,21 @@ def main():
                             # DEBUG: print "you attacked"
                             print("Ludwig attacks the enemy!")
 
+                            # This tells me that the player just selected the "attack" command
+                            has_player_attacked = True
+
+                            # DEBUG: This tells me what the current value of the "has player attacked" boolean
+                            print("has player attacked boolean value: " + str(has_player_attacked))
+
+                            # # This should stop the "for event" loop (source: w3schools at
+                            # # https://www.w3schools.com/python/ref_keyword_continue.asp).
+                            # break
+
+                            # # If you press the "confirmation" key again ("Z"), a new battle message will show up
+                            # if event.key == pygame.K_z:
+                            #     # This shows how much damage you've dealt to the enemy
+                            #     battle_message = "You've dealt 15 points of damage to the enemy!"
+
                         case pygame.K_2:  # If the user presses "2"
 
                             # This makes the battle menu to disappear so that the battle messages are rendered
@@ -419,6 +445,17 @@ def main():
                             print("Ludwig drank a potion! You have recovered 30 points of HP!")
                             # This prints how many potions you have remaining
                             print(f"Now, you have {players_number_of_potions} potions left.")
+
+                else:   # If I'm no longer rendering the battle menu, and I'm rendering battle messages
+
+                    # If the user presses a key
+                    if event.type == pygame.KEYDOWN:
+
+                        if has_player_attacked and event.key == pygame.K_z:
+                            # If the player chose "Attack" and presses the confirmation key.
+
+                            # This shows how much damage you've dealt to the enemy
+                            battle_message = "You've dealt 15 points of damage to the enemy!"
 
         # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
@@ -471,6 +508,18 @@ def main():
         game_window.blit(players_hp_surface, players_hp_rectangle)  # Player's current HP
         # End of the Player's UI.
 
+        # # For any input taken by the user (such as clicking the mouse or closing the window)
+        # for event in pygame.event.get():
+        #
+        #     # If the user presses a key
+        #     if event.type == pygame.KEYDOWN:
+        #
+        #         if has_player_attacked and event.type == pygame.K_z:
+        #             # If the player chose "Attack" and presses the confirmation key.
+        #
+        #             # This shows how much damage you've dealt to the enemy
+        #             battle_message = "You've dealt 15 points of damage to the enemy!"
+
         # This should render the game's window, and every sprite
         pygame.display.update()
 
@@ -478,19 +527,16 @@ def main():
     # https://youtu.be/AY9MnQ4x3zk?si=28DorTag9IRSrUi3&t=1099)
 
 
-""" Display battle message() function.
-
-This will display all the battle messages. That includes the default one: the one that says "an enemy has appeared!".
-
-Let me se Clear Code's 4-hour long tutorial, and see how he created and called the functions in his pygame game.
-"""
-
-
-def display_battle_message():
-    return 1
-
-
-
+# """ Display battle message() function.
+#
+# This will display all the battle messages. That includes the default one: the one that says "an enemy has appeared!".
+#
+# Let me se Clear Code's 4-hour long tutorial, and see how he created and called the functions in his pygame game.
+# """
+#
+#
+# def display_battle_message():
+#     return 1
 
 
 """ This lets me use the main function if I import this script as a library without any issues (source: my 
