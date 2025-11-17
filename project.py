@@ -305,6 +305,58 @@ has_player_attacked = False  # This tells me if the player selected the "Attack"
 is_players_turn = True  # This tells me if the current turn is the player's turn
 is_enemys_turn = False  # This tells me if the current turn is the enemy's turn.
 
+""" Class that stores the properties for each character (both the player and the enemy).
+
+Now, I could consider creating the Character class so that I can store the character’s name, HP, and attack points by 
+using object oriented programming, so that I can easily access the remaining HP and the attack points from both the 
+player and the enemy. Also, by using “name” as another property or field, I could easily render the name of the main 
+character and the enemy by using formatted strings (“f({variable})”).
+
+First, I need to make an __init__ function, and I will pass "self", and the health points, attack points, and 
+the character's name as parameters (source: my "Cookie Jar" 2025 Homework submission from Week 8 for 
+CS50 Python's Harvard's course.)
+
+To be able to easily read the properties of the Character class, I will also create a __str__() function, and 
+return each property of it (source: my "Cookie Jar" 2025 Homework submission from Week 8 for CS50 Python's Harvard's 
+course.)
+
+I’m properly adding and creating the main character by using the Character class by using object oriented programming.
+"""
+
+
+class Character:
+
+    # Init() function
+    def __init__(self, name, health_points, attack_points):
+        # Character's name
+        self.name = name
+
+        # Character's health points (HP)
+        self.health_points = health_points
+
+        # Character's attack points
+        self.attack_points = attack_points
+
+    # __str__() function
+    def __str__(self):
+        return f"{self.name} - HP: {self.health_points} - Attack points: {self.attack_points}"
+
+
+# This creates the player and the enemy by using the Character class
+# This will create the player's stats by using the Character class
+player = Character("Ludwig", 100, 20)
+
+# This creates the enemy's statistics / stats by using the Character class
+enemy = Character("Hostile Robot Leader", 500, 10)
+
+# # DEBUG: this should print me the enemy's properties
+# print("Enemy's stats: ")
+# print(str(enemy))
+
+# # DEBUG: this should print me the properties of the playable character
+# print("Player's stats: ")
+# print(str(player))
+
 # Functions / methods.
 
 """ Main() function.
@@ -356,6 +408,8 @@ def main():
     global players_number_of_potions
     global battle_message
     global has_player_attacked
+    global is_players_turn
+    global is_enemys_turn
 
     # End of the Global Variables
 
@@ -430,6 +484,10 @@ def main():
                             # DEBUG: print "you are on guard"
                             print("Ludwig is on guard!")
 
+                            # Your turn ends, and the enemy's turn begins
+                            is_players_turn = False
+                            is_enemys_turn = True
+
                         case pygame.K_3:  # if the user presses "3"
 
                             # This makes the battle menu to disappear so that the battle messages are rendered
@@ -446,16 +504,19 @@ def main():
                             # This prints how many potions you have remaining
                             print(f"Now, you have {players_number_of_potions} potions left.")
 
-                else:   # If I'm no longer rendering the battle menu, and I'm rendering battle messages
+                else:  # If I'm no longer rendering the battle menu, and I'm rendering battle messages
 
                     # If the user presses a key
                     if event.type == pygame.KEYDOWN:
 
+                        # If the player chose "Attack" and presses the confirmation key.
                         if has_player_attacked and event.key == pygame.K_z:
-                            # If the player chose "Attack" and presses the confirmation key.
-
                             # This shows how much damage you've dealt to the enemy
                             battle_message = "You've dealt 15 points of damage to the enemy!"
+
+                            # Now, the enemy's turn begins. The player's turn ents
+                            is_players_turn = False
+                            is_enemys_turn = True
 
         # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
