@@ -309,9 +309,9 @@ potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # 
 
 # Booleans that keep track of the player and the enemy's turns
 has_player_attacked = False  # This tells me if the player selected the "Attack" command
-
 is_players_turn = True  # This tells me if the current turn is the player's turn
 is_enemys_turn = False  # This tells me if the current turn is the enemy's turn.
+did_enemy_use_regular_attack = False    # This tells me if the enemy used a normal attack
 
 """ Class that stores the properties for each character (both the player and the enemy).
 
@@ -436,7 +436,14 @@ points lower or 10 times higher than the character's base damage.
 Let’s see: now, let’s create the enemy’s turn. To do that, let’s first make the enemy render a battle message that 
 says “the enemy attacks the player!”. This message should show up right after the player’s turn ends (be it for 
 attacking, be it for guarding, or be it from drinking a potion). It's pointless to check if the battle menu is
-being rendered during the enemy's turn, since the battle menu will never be rendered on the enemy's turn.
+being rendered during the enemy's turn, since the battle menu will never be rendered on the enemy's turn. I need
+to also create another boolean to detect if the enemy has done a regular attack. Then, if I detect that the enemy
+did a regular attack, I will also detect if the player pressed the confirmation key. If the player hit the 
+confirmation key after the boolean that detects if the enemy attacked is true, then I will render how much damage
+the enemy did to the player.
+
+Note: to simplify things, and to avoid confusion, instead of printing the player’s name, I will print “you” in the 
+battle messages. You only have 1 party member, after all. 
 """
 
 
@@ -450,6 +457,7 @@ def main():
     global has_player_attacked
     global is_players_turn
     global is_enemys_turn
+    global did_enemy_use_regular_attack
 
     # End of the Global Variables
 
@@ -580,11 +588,45 @@ def main():
 
                 elif is_enemys_turn:  # If it's the enemy's turn
 
-                    if event.key == pygame.K_z:  # If the user presses the confirmation key
+                    # If the user presses the confirmation key and the enemy does a regular attack
+                    if event.key == pygame.K_z and did_enemy_use_regular_attack is False:
 
                         # The dialogue box shows you that the enemy is attacking the player
-                        battle_message = f"The {enemy.name} attacks {player.name}!"
+                        battle_message = f"The {enemy.name} attacks you!"
                         battle_message_2 = ""   # Second line of the battle message (empty)
+
+                        # This will render the message with the enemy deling damage with a regular attack
+                        did_enemy_use_regular_attack = True
+
+                    elif did_enemy_use_regular_attack and event.key == pygame.K_z:
+                        # This randomly calculates the damage that the enemy can do to the player (from -10 to 10)
+                        randomly_generated_damage_output = enemy.attack_points + random.randint(-10, 10)
+
+                        # This shows how much damage you've dealt to the enemy
+                        battle_message = (
+                            f"The {enemy.name} has dealt {randomly_generated_damage_output} points of "
+                            f"damage")
+
+                        # Second line of text to prevent the text from getting outside the dialogue box
+                        battle_message_2 = f"to you!"
+
+                        # This should reduce the enemy's HP from the player's attack.
+                        # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
+                        player.health_points = player.health_points - randomly_generated_damage_output
+
+                        # DEBUG: This tells me how many HP points the enemy has after being attacked
+                        print("Your HP points left: " + str(player.health_points))
+
+                        # This will let the enemy render the "enemy attacks!" message after the player's turn
+                        did_enemy_use_regular_attack = False
+
+                        # # Now, the player's turn begins
+                        # is_players_turn = True
+                        # is_enemys_turn = False
+
+                        # # This will display the battle menu after the enemy attacks the player
+                        # display_battle_menu = True
+
 
         # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
