@@ -260,6 +260,7 @@ players_current_hp = 100  # This stores the current HP for the player. This goes
 players_number_of_potions = 5  # Initial number of potions that the player has.
 
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
+battle_message_2 = ""   # If I need to add a second line of text to avoid text from overflowing the dialogue box.
 display_battle_intro_message = True  # Boolean that will tell me if I should display "Enemy has appeared!" message.
 display_battle_menu = False  # Boolean that will tell the game if it should render the battle menu's UI.
 
@@ -277,6 +278,7 @@ enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
 # Surface for the Battle Messages
 battle_messages_surface = game_font.render(battle_message, False, 'White')
 battle_messages_rectangle = battle_messages_surface.get_rect(topleft=(35, 30))  # Battle messages' rectangle
+battle_messages_2_rectangle = battle_messages_surface.get_rect(topleft=(35, 65))  # Battle message 2's rectangle
 
 # Surface for the Playable Character's name
 playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
@@ -411,6 +413,16 @@ without actually reducing the enemy’s hit points. Then, I will use the random 
 damage between +10 and -10 points from their base attack points (i.e: that the player can do between 10 and 30 points 
 of damage if their base attack points are 20).
 
+I will need to find a way to create multi-line dialogues in pygame. And no: using “\n” didn’t work. I need to find a 
+way to either render a proper line-break while rendering the text surface; or render the string surface twice, but by 
+using slice() to first render the first half of the dialogue, and then using slice from the second half of the dialogue. 
+That, or I could make another variable called “battle_message_2”, which would store the 2nd half of the dialogue there 
+(I would hard-code that string that would always be inside the “battle message 2” variable). Creating the “battle 
+message 2” variable and hard-coding the text that would go into it would be the fastest solution, even if it’s not the 
+most efficient one. I would need to render this new battle message variable’s surface right below the first battle 
+message. I would also need to declare and leave empty the “battle message 2” variable as a global variable.
+
+
 """
 
 
@@ -420,6 +432,7 @@ def main():
     global display_battle_menu
     global players_number_of_potions
     global battle_message
+    global battle_message_2
     global has_player_attacked
     global is_players_turn
     global is_enemys_turn
@@ -525,8 +538,10 @@ def main():
                         # If the player chose "Attack" and presses the confirmation key.
                         if has_player_attacked and event.key == pygame.K_z:
                             # This shows how much damage you've dealt to the enemy
-                            battle_message = (f"{player.name} has dealt {player.attack_points} points of damage to "
-                                              f"the {enemy.name}!")
+                            battle_message = f"{player.name} has dealt {player.attack_points} points of damage"
+
+                            # Second line of text to prevent the text from getting outside the dialogue box
+                            battle_message_2 = f"to the {enemy.name}!"
 
                             # Now, the enemy's turn begins. The player's turn ents
                             is_players_turn = False
@@ -555,7 +570,6 @@ def main():
             game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
             game_window.blit(potion_command_surface, potion_command_rectangle)  # Render the "use potion" command
 
-
         else:  # If the battle menu is set to False, render the battle messages
 
             # This should overwrite the battle message surface with the new battle message after any action in the game.
@@ -563,6 +577,10 @@ def main():
 
             # This renders the text for the current battle message
             game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+            # This renders the second line of text if the text is too long
+            battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
+            game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
 
         # END OF THE SNIPPET THAT I NEED TO REACTIVATE LATER.
 
