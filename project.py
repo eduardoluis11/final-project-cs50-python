@@ -555,6 +555,7 @@ def main():
     global enemys_hp_surface
     # global enemys_hp_rectangle
     global battle_messages_surface
+    global potion_command_surface
     global victory
     global game_over
     global should_exit_game
@@ -690,13 +691,26 @@ def main():
                                 display_battle_menu = False
 
                                 # This updates the battle message to indicate that you're drinking a potion
-                                battle_message = f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!"
+                                battle_message = f"You drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!"
 
                                 # This reduces the number of potions that you have by 1
                                 players_number_of_potions = players_number_of_potions - 1
 
-                                # DEBUG: print "you have drank a potion"
-                                print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
+                                # This will increase the Player's HP to heal them by using the potion
+                                player.health_points = player.health_points + hp_amount_that_potions_heal
+
+                                # I should update the UI so that players can see that their HP has increased
+                                players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}',
+                                                                      False,
+                                                                      'White')
+
+                                # This will update the battle menu's UI to update the number of potions remaining
+                                potion_command_surface = game_font.render(
+                                    f'[2]: Use Potion ({players_number_of_potions} remaining)',
+                                    False, 'White')  # Use Potion command
+
+                                # # DEBUG: print "you have drank a potion"
+                                # print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
                                 # This prints how many potions you have remaining
                                 print(f"Now, you have {players_number_of_potions} potions left.")
 
