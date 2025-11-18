@@ -288,6 +288,9 @@ class Character:
         # Character's health points (HP)
         self.health_points = health_points
 
+        # Total number of health points (this will never go down during battle)
+        self.total_hp = health_points
+
         # Character's attack points
         self.attack_points = attack_points
 
@@ -301,7 +304,7 @@ class Character:
 player = Character("Ludwig", 100, 20)
 
 # This creates the enemy's statistics / stats by using the Character class
-enemy = Character("Hostile Robot Leader", 500, 10)
+enemy = Character("Hostile Robot Leader", 100, 15)
 
 # # DEBUG: this should print me the enemy's properties
 # print("Enemy's stats: ")
@@ -344,10 +347,16 @@ playable_characters_name_surface = game_font.render('Ludwig', False, 'White')
 playable_characters_name_rectangle = playable_characters_name_surface.get_rect(center=(360, 440))
 
 # Surface for the Playable Character's HP (Hit Points / life points)
-players_hp_surface = game_font.render(f'HP: {player.health_points}/100', False, 'White')
+players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}', False, 'White')
 
 # Rectangle for the Player's HP
 players_hp_rectangle = players_hp_surface.get_rect(center=(360, 480))
+
+# Surface for the Enemy's HP (Health Points)
+enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}', False, 'White')
+
+# Rectangle for the Enemy's HP
+enemys_hp_rectangle = enemys_hp_surface.get_rect(midleft=(50, 238))
 
 # Battle Menu UI
 attack_command_surface = game_font.render('[1]: Attack', False, 'White')  # Attack command's surface
@@ -458,6 +467,20 @@ any bugs.
 Well, I think that I can now put the winning and the losing conditions. I’ll make it so that, if the player has less or 
 equal to 0, I will render a message that says “You lost all of your HP. Game Over”. Meanwhile, if your enemy’s HP is 
 less or equal to 0, I will render the message “Congrats! You won! You defeated the boss!”
+
+I made a modification to the variables that display in the UI how much life you have left: instead of hard-coding that 
+you have a total of 100 HP points while you’re in full health, I created a new property in the Character class called 
+“Total HP”. In it, I will store the total number of health points that the character has. This total number of HP 
+points will NEVER go down. It just indicates how much HP you have lost during the battle. Since I will also display 
+the enemy’s HP in a UI, I want to also display the total number of HP points from him.
+
+BUGFIX: I fixed a bug in which, if I harmed the enemy, the enemy’s UI’s HP would render both the text with the enemy’s 
+HP when he was at full health, as well as another text slightly to the side showing the reduced number of HP points of 
+the enemy after being attacked by the player. Now, I’m rendering a black box with a white border to center to censor 
+the HP of the enemy from the past turn, so that the HP text always looks good in the UI: Sure: that means that, each 
+turn, my HP text from previous turns is accumulating behind the black rectangle. That is, my game is inefficient. 
+However, for the time being, the game works, so I’ll leave it at that for the time being.
+
 """
 
 
@@ -473,6 +496,9 @@ def main():
     global is_enemys_turn
     global did_enemy_use_regular_attack
     global players_hp_surface
+    global enemys_hp_surface
+    # global enemys_hp_rectangle
+    global battle_messages_surface
 
     # End of the Global Variables
 
@@ -604,6 +630,12 @@ def main():
                             # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
                             enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
+                            # I will update the UI that displays the enemy's HP
+                            # Surface for the Enemy's HP (Health Points)
+                            enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}', False, 'White')
+
+
+
                             # DEBUG: This tells me how many HP points the enemy has after being attacked
                             print("Enemy's HP points left: " + str(enemy.health_points))
 
@@ -640,7 +672,7 @@ def main():
                         player.health_points = player.health_points - randomly_generated_damage_output
 
                         # Updating the Player's HP in the UI
-                        players_hp_surface = game_font.render(f'HP: {player.health_points}/100', False, 'White')
+                        players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}', False, 'White')
 
                         # # DEBUG: This tells me how many HP points the enemy has after being attacked
                         # print("Your HP points left: " + str(player.health_points))
@@ -710,6 +742,17 @@ def main():
         game_window.blit(playable_characters_name_surface, playable_characters_name_rectangle)
         game_window.blit(players_hp_surface, players_hp_rectangle)  # Player's current HP
         # End of the Player's UI.
+
+        # UI that displays the Enemy's HP
+        # White rectangle. This will act as a border for a black box that will contain the Enemy's HP.
+        pygame.draw.rect(game_window, 'White', ((30, 200), (260, 70)))
+
+        # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
+        pygame.draw.rect(game_window, 'Black', ((40, 210), (240, 50)))
+
+        game_window.blit(enemys_hp_surface, enemys_hp_rectangle)  # Enemy's current HP
+        # End of the UI for the Enemy's HP
+
 
         # # For any input taken by the user (such as clicking the mouse or closing the window)
         # for event in pygame.event.get():
