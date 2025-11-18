@@ -306,7 +306,7 @@ player = Character("Ludwig", 100, 20)
 
 # This creates the enemy's statistics / stats by using the Character class
 # enemy = Character("Hostile Robot Leader", 500, 50)  # High on HP. Hard so that you can lose.
-enemy = Character("Hostile Robot Leader", 100, 15)    # Low on HP so that you can win easily
+enemy = Character("Hostile Robot Leader", 100, 15)  # Low on HP so that you can win easily
 
 # # DEBUG: this should print me the enemy's properties
 # print("Enemy's stats: ")
@@ -320,7 +320,7 @@ enemy = Character("Hostile Robot Leader", 100, 15)    # Low on HP so that you ca
 game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
 players_number_of_potions = 2  # Initial number of potions that the player has.
-hp_amount_that_potions_heal = 80    # Number of Health Points that you can heal from drinking potions
+hp_amount_that_potions_heal = 80  # Number of Health Points that you can heal from drinking potions
 
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
 battle_message_2 = ""  # If I need to add a second line of text to avoid text from overflowing the dialogue box.
@@ -539,6 +539,9 @@ strings.
 
 Now, if I drink a potion, and I could heal over my total HP, my total HP healed is NEVER above my current total number 
 of HP points.
+
+You can no longer use the “potion” command if you run out of potions. Pressing "2" won't do anything if you run out
+of potions.
 """
 
 
@@ -637,41 +640,44 @@ def main():
 
                     if display_battle_menu:  # If the battle menu is being displayed
 
-                        # I will use a match / case to detect which of the 3 battle command keys are being pressed
-                        match event.key:
+                        # # I will use a match / case to detect which of the 3 battle command keys are being pressed
+                        # match event.key:
 
-                            case pygame.K_1:  # If the user presses "1"
+                        # If the user presses the "1" key
+                        if event.key == pygame.K_1:
 
-                                # This makes the battle menu to disappear so that the battle messages are rendered
-                                display_battle_menu = False
+                            # case pygame.K_1:  # If the user presses "1"
 
-                                # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
-                                # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
-                                # battle_message = "Ludwig attacks the enemy!"
-                                # game_window.blit(battle_messages_surface, battle_messages_rectangle)
+                            # This makes the battle menu to disappear so that the battle messages are rendered
+                            display_battle_menu = False
 
-                                # This updates the battle message to indicate that the player attacked the enemy
-                                battle_message = f"{player.name} attacks the {enemy.name}!"
+                            # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
+                            # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
+                            # battle_message = "Ludwig attacks the enemy!"
+                            # game_window.blit(battle_messages_surface, battle_messages_rectangle)
 
-                                battle_message_2 = ""  # Second line of the battle message (empty)
+                            # This updates the battle message to indicate that the player attacked the enemy
+                            battle_message = f"{player.name} attacks the {enemy.name}!"
 
-                                # DEBUG: print "you attacked"
-                                print(f"{player.name} attacks the enemy!")
+                            battle_message_2 = ""  # Second line of the battle message (empty)
 
-                                # This tells me that the player just selected the "attack" command
-                                has_player_attacked = True
+                            # DEBUG: print "you attacked"
+                            print(f"{player.name} attacks the enemy!")
 
-                                # DEBUG: This tells me what the current value of the "has player attacked" boolean
-                                print("has player attacked boolean value: " + str(has_player_attacked))
+                            # This tells me that the player just selected the "attack" command
+                            has_player_attacked = True
 
-                                # # This should stop the "for event" loop (source: w3schools at
-                                # # https://www.w3schools.com/python/ref_keyword_continue.asp).
-                                # break
+                            # DEBUG: This tells me what the current value of the "has player attacked" boolean
+                            print("has player attacked boolean value: " + str(has_player_attacked))
 
-                                # # If you press the "confirmation" key again ("Z"), a new battle message will show up
-                                # if event.key == pygame.K_z:
-                                #     # This shows how much damage you've dealt to the enemy
-                                #     battle_message = "You've dealt 15 points of damage to the enemy!"
+                            # # This should stop the "for event" loop (source: w3schools at
+                            # # https://www.w3schools.com/python/ref_keyword_continue.asp).
+                            # break
+
+                            # # If you press the "confirmation" key again ("Z"), a new battle message will show up
+                            # if event.key == pygame.K_z:
+                            #     # This shows how much damage you've dealt to the enemy
+                            #     battle_message = "You've dealt 15 points of damage to the enemy!"
 
                             # case pygame.K_2:  # If the user presses "2"
                             #
@@ -688,43 +694,43 @@ def main():
                             #     is_players_turn = False
                             #     is_enemys_turn = True
 
-                            case pygame.K_2:  # if the user presses "2", I'll handle the potion drinking mechanic
+                        # if the user presses "2", I'll handle the potion drinking mechanic
+                        elif event.key == pygame.K_2 and players_number_of_potions > 0:
 
-                                # TODO
+                            # TODO
 
-                                # This makes the battle menu to disappear so that the battle messages are rendered
-                                display_battle_menu = False
+                            # This makes the battle menu to disappear so that the battle messages are rendered
+                            display_battle_menu = False
 
-                                # This updates the battle message to indicate that you're drinking a potion
-                                battle_message = f"You drank a potion!"
-                                battle_message_2 = f"You have recovered {hp_amount_that_potions_heal} points of HP!"
+                            # This updates the battle message to indicate that you're drinking a potion
+                            battle_message = f"You drank a potion!"
+                            battle_message_2 = f"You have recovered {hp_amount_that_potions_heal} points of HP!"
 
+                            # This reduces the number of potions that you have by 1
+                            players_number_of_potions = players_number_of_potions - 1
 
-                                # This reduces the number of potions that you have by 1
-                                players_number_of_potions = players_number_of_potions - 1
+                            # This will increase the Player's HP to heal them by using the potion.
+                            # The player should NEVER get any more HP than their total number of HP point
+                            if player.health_points + hp_amount_that_potions_heal > player.total_hp:
+                                player.health_points = 100
+                            else:
+                                # If you don't go over your total HP, add potion's HP amount to player's HP
+                                player.health_points = player.health_points + hp_amount_that_potions_heal
 
-                                # This will increase the Player's HP to heal them by using the potion.
-                                # The player should NEVER get any more HP than their total number of HP point
-                                if player.health_points + hp_amount_that_potions_heal > player.total_hp:
-                                    player.health_points = 100
-                                else:
-                                    # If you don't go over your total HP, add potion's HP amount to player's HP
-                                    player.health_points = player.health_points + hp_amount_that_potions_heal
+                            # I should update the UI so that players can see that their HP has increased
+                            players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}',
+                                                                  False,
+                                                                  'White')
 
-                                # I should update the UI so that players can see that their HP has increased
-                                players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}',
-                                                                      False,
-                                                                      'White')
+                            # This will update the battle menu's UI to update the number of potions remaining
+                            potion_command_surface = game_font.render(
+                                f'[2]: Use Potion ({players_number_of_potions} remaining)',
+                                False, 'White')  # Use Potion command
 
-                                # This will update the battle menu's UI to update the number of potions remaining
-                                potion_command_surface = game_font.render(
-                                    f'[2]: Use Potion ({players_number_of_potions} remaining)',
-                                    False, 'White')  # Use Potion command
-
-                                # # DEBUG: print "you have drank a potion"
-                                # print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
-                                # This prints how many potions you have remaining
-                                print(f"Now, you have {players_number_of_potions} potions left.")
+                            # # DEBUG: print "you have drank a potion"
+                            # print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
+                            # This prints how many potions you have remaining
+                            print(f"Now, you have {players_number_of_potions} potions left.")
 
                     else:  # If I'm no longer rendering the battle menu, and I'm rendering battle messages
 
