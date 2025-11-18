@@ -382,6 +382,9 @@ did_enemy_use_regular_attack = False  # This tells me if the enemy used a normal
 victory = False
 game_over = False
 
+# Exit game boolean
+should_exit_game = False
+
 # Functions / methods.
 
 """ Main() function.
@@ -509,6 +512,8 @@ that I need to create.)
 
 Now, if the player deals the finishing blow, I will first render the battle message showing how much damage I did to 
 the enemy. Then, if you hit the confirmation key once again, you render the victory message.
+
+Then, I will exit the game with sys.exit() after you hit the confirmation key right after reading the victory message.
 """
 
 
@@ -529,10 +534,13 @@ def main():
     global battle_messages_surface
     global victory
     global game_over
+    global should_exit_game
 
     # End of the Global Variables
 
     while True:  # Infinite loop that will pretty much make the entire game run
+        # while not should_exit_game:  # Loop that will pretty much make the entire game run. Exits if Game over or
+        # Victory.
 
         # For any input taken by the user (such as clicking the mouse or closing the window)
         for event in pygame.event.get():
@@ -545,6 +553,11 @@ def main():
             # If the user presses a key
             if event.type == pygame.KEYDOWN:
 
+                # If you either won or got a Game Over, and press the confirmation key
+                if should_exit_game and event.key == pygame.K_z:
+
+                    # This will exit the game.
+                    sys.exit("You have exited the game.")
 
 
                 # If it's still the enemy's turn, but the battle menu is activated and you press "Z"
@@ -554,10 +567,15 @@ def main():
                     is_players_turn = True
                     is_enemys_turn = False
 
+
+
                 # If it's the player's turn
                 if is_players_turn:
 
-                    # If
+                    # # If you either won or got a Game Over
+                    # if should_exit_game and event.key == pygame.K_z:
+                    #
+                    #     sys.exit("You have exited the game.")
 
                     # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being
                     # displayed.
@@ -672,6 +690,9 @@ def main():
 
                                 victory = True  # You win the game if you defeat the enemy
 
+                                # # This will close the game after you hit the confirmation key one more time
+                                # should_exit_game = True
+
                             # I will update the UI that displays the enemy's HP
                             # Surface for the Enemy's HP (Health Points)
                             enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}', False, 'White')
@@ -687,7 +708,7 @@ def main():
 
                 elif victory and event.key == pygame.K_z:                # If you defeated the enemy
 
-                    # TODO
+
                     # # If the enemy loses all of their HP, you win, and you beat the game
                     # if enemy.health_points <= 0:
                     # I will render "You Win! Congrats" in a battle message
@@ -703,6 +724,9 @@ def main():
                     # This renders the second line of text if the text is too long
                     battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
                     game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
+
+                    # This will let me exit the game after hitting the confirmation key one more time
+                    should_exit_game = True
 
                     # # This will close the game and exit the program. I want to display this AFTER the user hits the
                     # # confirmation key again.
@@ -861,6 +885,9 @@ def main():
 
     # End of the snippet that renders a black screen once you execute a pygame game (source:
     # https://youtu.be/AY9MnQ4x3zk?si=28DorTag9IRSrUi3&t=1099)
+
+    # # This will close the game. It will only be executed if you press the confirmation key after Game over or Victory
+    # sys.exit("You have exited the game.")
 
 
 # """ Display battle message() function.
