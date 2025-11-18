@@ -527,6 +527,8 @@ Now, when you get defeated:
 me the finishing blow, I will render “0” in the HP UI for the player.
 
 I will NEVER activate the battle menu during the enemy’s turn if the player loses all of their HP.
+
+Now, if I hit the “z” key after the “game over” message, I correctly close the game.
 """
 
 
@@ -566,21 +568,18 @@ def main():
             # If the user presses a key
             if event.type == pygame.KEYDOWN:
 
-                # If you either won or got a Game Over, and press the confirmation key
-                if should_exit_game and event.key == pygame.K_z:
-
-                    # This will exit the game.
-                    sys.exit("You have exited the game.")
-
-
                 # If it's still the enemy's turn, but the battle menu is activated and you press "Z"
                 if is_enemys_turn and display_battle_menu and event.key == pygame.K_z:
-
                     # I will activate the player's turn, and deactivate the enemy's turn
                     is_players_turn = True
                     is_enemys_turn = False
 
-                if game_over and event.key == pygame.K_z:   # If you get defeated
+                # If you either won or got a Game Over, and press the confirmation key
+                if should_exit_game and event.key == pygame.K_z:
+                    # This will exit the game.
+                    sys.exit("You have exited the game.")
+
+                elif game_over and event.key == pygame.K_z:  # If you get defeated
 
                     # # I want the player's HP to be equal to 0 if it's a negative number
                     # if player.health_points < 0:
@@ -600,8 +599,8 @@ def main():
                     battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
                     game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
 
-                    # # This will let me exit the game the next time the user presses the confirmation key
-                    # should_exit_game = True
+                    # This will let me exit the game the next time the user presses the confirmation key
+                    should_exit_game = True
 
 
                 # If it's the player's turn
@@ -719,7 +718,6 @@ def main():
 
                             # If the enemy gets negative HP or 0
                             if enemy.health_points <= 0:
-
                                 # I will always change the HP to "0" if the enemy's defeated
                                 enemy.health_points = 0
 
@@ -730,9 +728,8 @@ def main():
 
                             # I will update the UI that displays the enemy's HP
                             # Surface for the Enemy's HP (Health Points)
-                            enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}', False, 'White')
-
-
+                            enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}',
+                                                                 False, 'White')
 
                             # # DEBUG: This tells me how many HP points the enemy has after being attacked
                             # print("Enemy's HP points left: " + str(enemy.health_points))
@@ -741,8 +738,7 @@ def main():
                             is_players_turn = False
                             is_enemys_turn = True
 
-                elif victory and event.key == pygame.K_z:                # If you defeated the enemy
-
+                elif victory and event.key == pygame.K_z:  # If you defeated the enemy
 
                     # # If the enemy loses all of their HP, you win, and you beat the game
                     # if enemy.health_points <= 0:
@@ -802,13 +798,14 @@ def main():
 
                             game_over = True  # You lose the game if you lose all of your HP
 
-                        else:   # If the player still has some HP left
+                        else:  # If the player still has some HP left
 
                             # This will display the battle menu after the enemy attacks the player
                             display_battle_menu = True
 
                         # Updating the Player's HP in the UI
-                        players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}', False, 'White')
+                        players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}', False,
+                                                              'White')
 
                         # # DEBUG: This tells me how many HP points the enemy has after being attacked
                         # print("Your HP points left: " + str(player.health_points))
@@ -819,10 +816,6 @@ def main():
                         # # Now, the player's turn begins
                         # is_players_turn = True
                         # is_enemys_turn = False
-
-
-
-
 
         # If no input is detected by the user (if they don't click nor press any keys), this will execute
 
@@ -840,7 +833,7 @@ def main():
         # Black rectangle. This rectangle needs to be within the white rectangle so that my white text can be read.
         pygame.draw.rect(game_window, 'Black', ((30, 25), (660, 140)))
 
-        if display_battle_menu and is_players_turn: # If the boolean that lets me render the battle menu is true and if it's the player's turn
+        if display_battle_menu and is_players_turn:  # If the boolean that lets me render the battle menu is true and if it's the player's turn
 
             # Show the battle menu
             game_window.blit(attack_command_surface, attack_command_rectangle)  # Render the "attack" command
@@ -888,7 +881,6 @@ def main():
         game_window.blit(enemys_hp_surface, enemys_hp_rectangle)  # Enemy's current HP
         # End of the UI for the Enemy's HP
 
-
         # # For any input taken by the user (such as clicking the mouse or closing the window)
         # for event in pygame.event.get():
         #
@@ -900,11 +892,6 @@ def main():
         #
         #             # This shows how much damage you've dealt to the enemy
         #             battle_message = "You've dealt 15 points of damage to the enemy!"
-
-
-
-
-
 
         # This should render the game's window, and every sprite
         pygame.display.update()
