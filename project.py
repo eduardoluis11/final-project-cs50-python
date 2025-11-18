@@ -485,6 +485,16 @@ turn, my HP text from previous turns is accumulating behind the black rectangle.
 However, for the time being, the game works, so I’ll leave it at that for the time being.
 
 First things first: let’s implement the “you win” screen if you win.
+
+If you defeat the enemy, I will do the following:
+1) I will make the enemy’s UI to display “0” instead of negative numbers once you defeat him.
+
+2) I will exit the game by using sys.exit() once you win (or get a game over, for that matter).
+
+3) I will try to display how much damage the player did in the battle message BEFORE showing the victory message. This 
+could be done by checking yet another boolean, and by detecting if the player presses “Z” once again in the “if it’s 
+the player’s turn” in the “for” loop that detects for events. 
+
 """
 
 
@@ -634,14 +644,18 @@ def main():
                             # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
                             enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
+                            # If the enemy gets negative HP, I will change it to "0"
+                            if enemy.health_points < 0:
+                                enemy.health_points = 0
+
                             # I will update the UI that displays the enemy's HP
                             # Surface for the Enemy's HP (Health Points)
                             enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}', False, 'White')
 
 
 
-                            # DEBUG: This tells me how many HP points the enemy has after being attacked
-                            print("Enemy's HP points left: " + str(enemy.health_points))
+                            # # DEBUG: This tells me how many HP points the enemy has after being attacked
+                            # print("Enemy's HP points left: " + str(enemy.health_points))
 
                             # Now, the enemy's turn begins. The player's turn ents
                             is_players_turn = False
