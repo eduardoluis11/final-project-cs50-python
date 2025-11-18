@@ -474,6 +474,9 @@ you have a total of 100 HP points while you’re in full health, I created a new
 points will NEVER go down. It just indicates how much HP you have lost during the battle. Since I will also display 
 the enemy’s HP in a UI, I want to also display the total number of HP points from him.
 
+Also, to make things easier for me (and to provide “feedback” or “game feel” to the user), I will display in the UI the 
+enemy’s remaining HP. 
+
 BUGFIX: I fixed a bug in which, if I harmed the enemy, the enemy’s UI’s HP would render both the text with the enemy’s 
 HP when he was at full health, as well as another text slightly to the side showing the reduced number of HP points of 
 the enemy after being attacked by the player. Now, I’m rendering a black box with a white border to center to censor 
@@ -481,6 +484,7 @@ the HP of the enemy from the past turn, so that the HP text always looks good in
 turn, my HP text from previous turns is accumulating behind the black rectangle. That is, my game is inefficient. 
 However, for the time being, the game works, so I’ll leave it at that for the time being.
 
+First things first: let’s implement the “you win” screen if you win.
 """
 
 
@@ -765,6 +769,23 @@ def main():
         #
         #             # This shows how much damage you've dealt to the enemy
         #             battle_message = "You've dealt 15 points of damage to the enemy!"
+
+        # If the enemy loses all of their HP, you win, and you beat the game
+        if enemy.health_points <= 0:
+
+            # I will render "You Win! Congrats" in a battle message
+            battle_message = "You've defeated the enemy!"
+            battle_message_2 = "Congrats!"
+
+            # This should overwrite the battle message surface with the new battle message after any action in the game.
+            battle_messages_surface = game_font.render(battle_message, False, 'White')
+
+            # This renders the text for the current battle message
+            game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+            # This renders the second line of text if the text is too long
+            battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
+            game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
 
         # If the player loses all of their health points, show a "Game Over" screen
         if player.health_points <= 0:
