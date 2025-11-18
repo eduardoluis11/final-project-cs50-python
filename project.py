@@ -305,8 +305,8 @@ class Character:
 player = Character("Ludwig", 100, 20)
 
 # This creates the enemy's statistics / stats by using the Character class
-enemy = Character("Hostile Robot Leader", 500, 50)  # High on HP. Hard so that you can lose.
-# enemy = Character("Hostile Robot Leader", 100, 15)    # Low on HP so that you can win easily
+# enemy = Character("Hostile Robot Leader", 500, 50)  # High on HP. Hard so that you can lose.
+enemy = Character("Hostile Robot Leader", 100, 15)    # Low on HP so that you can win easily
 
 # # DEBUG: this should print me the enemy's properties
 # print("Enemy's stats: ")
@@ -319,7 +319,7 @@ enemy = Character("Hostile Robot Leader", 500, 50)  # High on HP. Hard so that y
 # This specifies the font that I will use, and its size. At least, I'll use this for the playable character's name.
 game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
-players_number_of_potions = 5  # Initial number of potions that the player has.
+players_number_of_potions = 2  # Initial number of potions that the player has.
 
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
 battle_message_2 = ""  # If I need to add a second line of text to avoid text from overflowing the dialogue box.
@@ -367,7 +367,7 @@ attack_command_rectangle = attack_command_surface.get_rect(topleft=(35, 30))  # 
 guard_command_surface = game_font.render('[2]: Guard', False, 'White')  # Guard command's surface
 guard_command_rectangle = guard_command_surface.get_rect(midleft=(35, 80))  # Guard command's rectangle
 
-potion_command_surface = game_font.render(f'[3]: Use Potion ({players_number_of_potions} remaining)',
+potion_command_surface = game_font.render(f'[2]: Use Potion ({players_number_of_potions} remaining)',
                                           False, 'White')  # Use Potion command
 potion_command_rectangle = potion_command_surface.get_rect(midtop=(360, 30))  # Use Potion command's rectangle
 # End of the Battle Menu UI
@@ -529,6 +529,9 @@ me the finishing blow, I will render “0” in the HP UI for the player.
 I will NEVER activate the battle menu during the enemy’s turn if the player loses all of their HP.
 
 Now, if I hit the “z” key after the “game over” message, I correctly close the game.
+
+I’ve removed the “Guard” command, and now, to drink a potion, you need to press the “2” key. Also, I replaced the 
+number in the drinking potion command to be a “2” instead of a “3”
 """
 
 
@@ -661,22 +664,22 @@ def main():
                                 #     # This shows how much damage you've dealt to the enemy
                                 #     battle_message = "You've dealt 15 points of damage to the enemy!"
 
-                            case pygame.K_2:  # If the user presses "2"
+                            # case pygame.K_2:  # If the user presses "2"
+                            #
+                            #     # This makes the battle menu to disappear so that the battle messages are rendered
+                            #     display_battle_menu = False
+                            #
+                            #     # This updates the battle message to indicate that you're guarding
+                            #     battle_message = "Ludwig is on guard!"
+                            #
+                            #     # DEBUG: print "you are on guard"
+                            #     print("Ludwig is on guard!")
+                            #
+                            #     # Your turn ends, and the enemy's turn begins
+                            #     is_players_turn = False
+                            #     is_enemys_turn = True
 
-                                # This makes the battle menu to disappear so that the battle messages are rendered
-                                display_battle_menu = False
-
-                                # This updates the battle message to indicate that you're guarding
-                                battle_message = "Ludwig is on guard!"
-
-                                # DEBUG: print "you are on guard"
-                                print("Ludwig is on guard!")
-
-                                # Your turn ends, and the enemy's turn begins
-                                is_players_turn = False
-                                is_enemys_turn = True
-
-                            case pygame.K_3:  # if the user presses "3"
+                            case pygame.K_2:  # if the user presses "2"
 
                                 # This makes the battle menu to disappear so that the battle messages are rendered
                                 display_battle_menu = False
@@ -837,7 +840,7 @@ def main():
 
             # Show the battle menu
             game_window.blit(attack_command_surface, attack_command_rectangle)  # Render the "attack" command
-            game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
+            # game_window.blit(guard_command_surface, guard_command_rectangle)  # Render the "guard" command
             game_window.blit(potion_command_surface, potion_command_rectangle)  # Render the "use potion" command
 
         else:  # If the battle menu is set to False, render the battle messages
