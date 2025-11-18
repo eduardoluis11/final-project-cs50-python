@@ -305,7 +305,8 @@ class Character:
 player = Character("Ludwig", 100, 20)
 
 # This creates the enemy's statistics / stats by using the Character class
-enemy = Character("Hostile Robot Leader", 100, 15)
+enemy = Character("Hostile Robot Leader", 500, 15)  # High on HP. Hard so that you can lose.
+# enemy = Character("Hostile Robot Leader", 100, 15)    # Low on HP so that you can win easily
 
 # # DEBUG: this should print me the enemy's properties
 # print("Enemy's stats: ")
@@ -514,6 +515,9 @@ Now, if the player deals the finishing blow, I will first render the battle mess
 the enemy. Then, if you hit the confirmation key once again, you render the victory message.
 
 Then, I will exit the game with sys.exit() after you hit the confirmation key right after reading the victory message.
+
+Now, I will do a similar thing if I lose the game: I will exit the game after hitting the confirmation key after 
+rendering the Game Over screen.
 """
 
 
@@ -878,6 +882,9 @@ def main():
             # This renders the second line of text if the text is too long
             battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
             game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
+
+            # This will let me exit the game the next time the user presses the confirmation key
+            should_exit_game = True
 
 
         # This should render the game's window, and every sprite
