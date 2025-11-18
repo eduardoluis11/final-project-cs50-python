@@ -232,6 +232,7 @@ super attack, or wasting a turn).
 To import the "randint" library, I need to import it form the "random" library (source: Clear Code on YouTube at
 https://youtu.be/AY9MnQ4x3zk?si=mfCvPMEh2o7MNjM0).
 """
+import sys
 
 import pygame
 
@@ -377,6 +378,10 @@ is_players_turn = True  # This tells me if the current turn is the player's turn
 is_enemys_turn = False  # This tells me if the current turn is the enemy's turn.
 did_enemy_use_regular_attack = False  # This tells me if the enemy used a normal attack
 
+# Game over and Victory booleans
+victory = False
+game_over = False
+
 # Functions / methods.
 
 """ Main() function.
@@ -495,6 +500,15 @@ If you defeat the enemy, I will do the following:
 could be done by checking yet another boolean, and by detecting if the player presses “Z” once again in the “if it’s 
 the player’s turn” in the “for” loop that detects for events. 
 
+Making a boolean for when you get a game over, and making a boolean for when you beat the game would be a good idea. 
+They don’t need to be global variables. The could be local variables within the main() function, since the main 
+function renders most of the game, anyways. But, given that I will need to use asserts later on to make unit tests, 
+and since the additional functions that I need to create need to be OUTSIDE of the main function, I’m better off by 
+creating as many global variables as possible (unless I want to pass any values as parameters to the new functions 
+that I need to create.)
+
+Now, if the player deals the finishing blow, I will first render the battle message showing how much damage I did to 
+the enemy. Then, if you hit the confirmation key once again, you render the victory message.
 """
 
 
@@ -513,6 +527,8 @@ def main():
     global enemys_hp_surface
     # global enemys_hp_rectangle
     global battle_messages_surface
+    global victory
+    global game_over
 
     # End of the Global Variables
 
@@ -529,6 +545,8 @@ def main():
             # If the user presses a key
             if event.type == pygame.KEYDOWN:
 
+
+
                 # If it's still the enemy's turn, but the battle menu is activated and you press "Z"
                 if is_enemys_turn and display_battle_menu and event.key == pygame.K_z:
 
@@ -538,6 +556,8 @@ def main():
 
                 # If it's the player's turn
                 if is_players_turn:
+
+                    # If
 
                     # If the user presses a "confirmation" key ("Z") while the "enemy has appeared" message is being
                     # displayed.
@@ -644,9 +664,13 @@ def main():
                             # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
                             enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
-                            # If the enemy gets negative HP, I will change it to "0"
-                            if enemy.health_points < 0:
+                            # If the enemy gets negative HP or 0
+                            if enemy.health_points <= 0:
+
+                                # I will always change the HP to "0" if the enemy's defeated
                                 enemy.health_points = 0
+
+                                victory = True  # You win the game if you defeat the enemy
 
                             # I will update the UI that displays the enemy's HP
                             # Surface for the Enemy's HP (Health Points)
@@ -660,6 +684,29 @@ def main():
                             # Now, the enemy's turn begins. The player's turn ents
                             is_players_turn = False
                             is_enemys_turn = True
+
+                elif victory and event.key == pygame.K_z:                # If you defeated the enemy
+
+                    # TODO
+                    # # If the enemy loses all of their HP, you win, and you beat the game
+                    # if enemy.health_points <= 0:
+                    # I will render "You Win! Congrats" in a battle message
+                    battle_message = "You've defeated the enemy!"
+                    battle_message_2 = "Congrats!"
+
+                    # This should overwrite the battle message surface with the new battle message after any action in the game.
+                    battle_messages_surface = game_font.render(battle_message, False, 'White')
+
+                    # This renders the text for the current battle message
+                    game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+                    # This renders the second line of text if the text is too long
+                    battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
+                    game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
+
+                    # # This will close the game and exit the program. I want to display this AFTER the user hits the
+                    # # confirmation key again.
+                    # sys.exit("You've beaten the game! Congrats!")
 
                 elif is_enemys_turn:  # If it's the enemy's turn
 
@@ -784,22 +831,7 @@ def main():
         #             # This shows how much damage you've dealt to the enemy
         #             battle_message = "You've dealt 15 points of damage to the enemy!"
 
-        # If the enemy loses all of their HP, you win, and you beat the game
-        if enemy.health_points <= 0:
 
-            # I will render "You Win! Congrats" in a battle message
-            battle_message = "You've defeated the enemy!"
-            battle_message_2 = "Congrats!"
-
-            # This should overwrite the battle message surface with the new battle message after any action in the game.
-            battle_messages_surface = game_font.render(battle_message, False, 'White')
-
-            # This renders the text for the current battle message
-            game_window.blit(battle_messages_surface, battle_messages_rectangle)
-
-            # This renders the second line of text if the text is too long
-            battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
-            game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
 
         # If the player loses all of their health points, show a "Game Over" screen
         if player.health_points <= 0:
