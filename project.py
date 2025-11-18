@@ -305,7 +305,7 @@ class Character:
 player = Character("Ludwig", 100, 20)
 
 # This creates the enemy's statistics / stats by using the Character class
-enemy = Character("Hostile Robot Leader", 500, 15)  # High on HP. Hard so that you can lose.
+enemy = Character("Hostile Robot Leader", 500, 50)  # High on HP. Hard so that you can lose.
 # enemy = Character("Hostile Robot Leader", 100, 15)    # Low on HP so that you can win easily
 
 # # DEBUG: this should print me the enemy's properties
@@ -518,6 +518,15 @@ Then, I will exit the game with sys.exit() after you hit the confirmation key ri
 
 Now, I will do a similar thing if I lose the game: I will exit the game after hitting the confirmation key after 
 rendering the Game Over screen.
+
+Now, when you get defeated:
+
+1) I will render how much damage the enemy did to me in the finishing blow BEFORE rendering the Game Over screen.
+
+2) I will update the Player’s UI so that negative numbers are never rendered as HP. That is, that, if the enemy gives 
+me the finishing blow, I will render “0” in the HP UI for the player.
+
+I will NEVER activate the battle menu during the enemy’s turn if the player loses all of their HP.
 """
 
 
@@ -571,10 +580,32 @@ def main():
                     is_players_turn = True
                     is_enemys_turn = False
 
+                if game_over and event.key == pygame.K_z:   # If you get defeated
+
+                    # # I want the player's HP to be equal to 0 if it's a negative number
+                    # if player.health_points < 0:
+                    #     player.health_points = 0
+
+                    # I will render "Game Over" in a battle message
+                    battle_message = "You've lost all of your Health Points, and became unconscious."
+                    battle_message_2 = "GAME OVER"
+
+                    # This should overwrite the battle message surface with the new battle message after any action in the game.
+                    battle_messages_surface = game_font.render(battle_message, False, 'White')
+
+                    # This renders the text for the current battle message
+                    game_window.blit(battle_messages_surface, battle_messages_rectangle)
+
+                    # This renders the second line of text if the text is too long
+                    battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
+                    game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
+
+                    # # This will let me exit the game the next time the user presses the confirmation key
+                    # should_exit_game = True
 
 
                 # If it's the player's turn
-                if is_players_turn:
+                elif is_players_turn:
 
                     # # If you either won or got a Game Over
                     # if should_exit_game and event.key == pygame.K_z:
@@ -764,6 +795,18 @@ def main():
                         # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
                         player.health_points = player.health_points - randomly_generated_damage_output
 
+                        # If the Player gets negative HP or 0
+                        if player.health_points <= 0:
+                            # I will always change the HP to "0" if the player is defeated
+                            player.health_points = 0
+
+                            game_over = True  # You lose the game if you lose all of your HP
+
+                        else:   # If the player still has some HP left
+
+                            # This will display the battle menu after the enemy attacks the player
+                            display_battle_menu = True
+
                         # Updating the Player's HP in the UI
                         players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}', False, 'White')
 
@@ -777,8 +820,7 @@ def main():
                         # is_players_turn = True
                         # is_enemys_turn = False
 
-                        # This will display the battle menu after the enemy attacks the player
-                        display_battle_menu = True
+
 
 
 
@@ -861,30 +903,7 @@ def main():
 
 
 
-        # If the player loses all of their health points, show a "Game Over" screen
-        if player.health_points <= 0:
 
-            # I want the player's HP to be equal to 0 if it's a negative number
-            if player.health_points < 0:
-
-                player.health_points = 0
-
-            # I will render "Game Over" in a battle message
-            battle_message = "You've lost all of your Health Points, and became unconscious."
-            battle_message_2 = "GAME OVER"
-
-            # This should overwrite the battle message surface with the new battle message after any action in the game.
-            battle_messages_surface = game_font.render(battle_message, False, 'White')
-
-            # This renders the text for the current battle message
-            game_window.blit(battle_messages_surface, battle_messages_rectangle)
-
-            # This renders the second line of text if the text is too long
-            battle_messages_2_surface = game_font.render(battle_message_2, False, 'White')
-            game_window.blit(battle_messages_2_surface, battle_messages_2_rectangle)
-
-            # This will let me exit the game the next time the user presses the confirmation key
-            should_exit_game = True
 
 
         # This should render the game's window, and every sprite
