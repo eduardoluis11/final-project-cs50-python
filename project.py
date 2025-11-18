@@ -536,6 +536,9 @@ number in the drinking potion command to be a “2” instead of a “3”
 
 Now, the amount that you heal from drinking a potion is stored in a variable, and is printed dynamically via formatted 
 strings. 
+
+Now, if I drink a potion, and I could heal over my total HP, my total HP healed is NEVER above my current total number 
+of HP points.
 """
 
 
@@ -685,19 +688,28 @@ def main():
                             #     is_players_turn = False
                             #     is_enemys_turn = True
 
-                            case pygame.K_2:  # if the user presses "2"
+                            case pygame.K_2:  # if the user presses "2", I'll handle the potion drinking mechanic
+
+                                # TODO
 
                                 # This makes the battle menu to disappear so that the battle messages are rendered
                                 display_battle_menu = False
 
                                 # This updates the battle message to indicate that you're drinking a potion
-                                battle_message = f"You drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!"
+                                battle_message = f"You drank a potion!"
+                                battle_message_2 = f"You have recovered {hp_amount_that_potions_heal} points of HP!"
+
 
                                 # This reduces the number of potions that you have by 1
                                 players_number_of_potions = players_number_of_potions - 1
 
-                                # This will increase the Player's HP to heal them by using the potion
-                                player.health_points = player.health_points + hp_amount_that_potions_heal
+                                # This will increase the Player's HP to heal them by using the potion.
+                                # The player should NEVER get any more HP than their total number of HP point
+                                if player.health_points + hp_amount_that_potions_heal > player.total_hp:
+                                    player.health_points = 100
+                                else:
+                                    # If you don't go over your total HP, add potion's HP amount to player's HP
+                                    player.health_points = player.health_points + hp_amount_that_potions_heal
 
                                 # I should update the UI so that players can see that their HP has increased
                                 players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}',
