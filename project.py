@@ -320,6 +320,7 @@ enemy = Character("Hostile Robot Leader", 100, 15)    # Low on HP so that you ca
 game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
 players_number_of_potions = 2  # Initial number of potions that the player has.
+hp_amount_that_potions_heal = 80    # Number of Health Points that you can heal from drinking potions
 
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
 battle_message_2 = ""  # If I need to add a second line of text to avoid text from overflowing the dialogue box.
@@ -532,6 +533,9 @@ Now, if I hit the “z” key after the “game over” message, I correctly clo
 
 I’ve removed the “Guard” command, and now, to drink a potion, you need to press the “2” key. Also, I replaced the 
 number in the drinking potion command to be a “2” instead of a “3”
+
+Now, the amount that you heal from drinking a potion is stored in a variable, and is printed dynamically via formatted 
+strings. 
 """
 
 
@@ -540,6 +544,7 @@ def main():
     global display_battle_intro_message
     global display_battle_menu
     global players_number_of_potions
+    global hp_amount_that_potions_heal
     global battle_message
     global battle_message_2
     global has_player_attacked
@@ -685,13 +690,13 @@ def main():
                                 display_battle_menu = False
 
                                 # This updates the battle message to indicate that you're drinking a potion
-                                battle_message = "Ludwig drank a potion! You have recovered 30 points of HP!"
+                                battle_message = f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!"
 
                                 # This reduces the number of potions that you have by 1
                                 players_number_of_potions = players_number_of_potions - 1
 
                                 # DEBUG: print "you have drank a potion"
-                                print("Ludwig drank a potion! You have recovered 30 points of HP!")
+                                print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
                                 # This prints how many potions you have remaining
                                 print(f"Now, you have {players_number_of_potions} potions left.")
 
