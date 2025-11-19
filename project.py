@@ -261,7 +261,9 @@ Copyright information about the Sprite used:
 I added a sprite by Penusbmic from his "Sci-Fi Character Pack 8" at itch.io at
 https://penusbmic.itch.io/sci-fi-character-pack-8. The sprite used is called "The Storm Head Droid".
 
-
+How to scale a sprite to make it bigger in Pygame: you need to get the sprite, use the pygame.transform.scale()
+function to it, and put as parameters the variable with the sprite in it, the new width, and the new height (source:
+Coding With Russ on YouTube at https://youtu.be/Xzmpl5tnJnc?si=58Mj8YgG3SoqKEek&t=54 ).
 """
 import sys
 
@@ -288,7 +290,7 @@ game_window = pygame.display.set_mode((720, 576))
 # This will add the game's title to the window's tab
 pygame.display.set_caption("Gold Standard")
 
-game_music = pygame.mixer.Sound("assets/audio/industrial-disaster-alberto-salinas.mp3")  # Game's music
+game_music = pygame.mixer.Sound("assets/audio/industrial-disaster-alberto-salinas-no-guitar.mp3")  # Game's music
 game_music.play(loops=-1)  # This plays the music, and makes it loop indefinitely
 
 """ Class that stores the properties for each character (both the player and the enemy).
@@ -367,7 +369,9 @@ display_battle_menu = False  # Boolean that will tell the game if it should rend
 # This loads the enemy sprite, but doesn't render it yet (source:
 # https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
 # EDIT LATER, since I'm using a PLACEHOLDER sprite.
-enemy_surface = pygame.image.load('assets/images/sprites/enemy-sprite-penusbmic.png').convert_alpha()
+enemy_surface_small_sprite = pygame.image.load('assets/images/sprites/enemy-sprite-penusbmic.png').convert_alpha()
+# This scales the sprite to make it bigger
+enemy_surface = pygame.transform.scale(enemy_surface_small_sprite, (70, 110))
 
 # This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
 enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
