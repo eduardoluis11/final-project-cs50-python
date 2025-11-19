@@ -606,6 +606,10 @@ The game now has some strategy. You can no longer win by spamming the â€œattackâ
 whenever you feel like. You need to drink them whenever your HP is really low. If you drink them while your HP is high, 
 you waste them, and you will most likely lose at the end. If the boss has 200 HP and the same attack points as the 
 player, the difficulty is just right (medium to medium-easy, if you know when to drink the potions). 
+
+My additional functions aren't particularly complex. But at least I'll be able to put an assert to them.
+
+
 """
 
 
@@ -833,24 +837,22 @@ def main():
                             # Second line of text to prevent the text from getting outside the dialogue box
                             battle_message_2 = f"to the {enemy.name}!"
 
+
+
                             # This should reduce the enemy's HP from the player's attack.
                             # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
-                            enemy.health_points = enemy.health_points - randomly_generated_damage_output
-
-                            # If the enemy gets negative HP or 0
-                            if enemy.health_points <= 0:
-                                # I will always change the HP to "0" if the enemy's defeated
-                                enemy.health_points = 0
-
-                                victory = True  # You win the game if you defeat the enemy
-
-                                # # This will close the game after you hit the confirmation key one more time
-                                # should_exit_game = True
+                            # This sends the enemy's HP and the damage they suffered into a function to update
+                            # their HP.
+                            enemy.health_points = health_points_remaining_calculation(enemy.health_points, randomly_generated_damage_output)
+                            # enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
                             # I will update the UI that displays the enemy's HP
                             # Surface for the Enemy's HP (Health Points)
                             enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}',
                                                                  False, 'White')
+
+                            if enemy.health_points == 0:    # If you defeat the enemy, you win
+                                victory = True
 
                             # # DEBUG: This tells me how many HP points the enemy has after being attacked
                             # print("Enemy's HP points left: " + str(enemy.health_points))
@@ -911,13 +913,17 @@ def main():
 
                         # This should reduce the enemy's HP from the player's attack.
                         # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
-                        player.health_points = player.health_points - randomly_generated_damage_output
+                        # This will update the player's HP by sending their current HP and the damage suffered to a
+                        # function.
+                        player.health_points = health_points_remaining_calculation(player.health_points, randomly_generated_damage_output)
+                        # player.health_points = player.health_points - randomly_generated_damage_output
 
                         # If the Player gets negative HP or 0
-                        if player.health_points <= 0:
-                            # I will always change the HP to "0" if the player is defeated
-                            player.health_points = 0
+                        # if player.health_points <= 0:
+                        #     # I will always change the HP to "0" if the player is defeated
+                        #     player.health_points = 0
 
+                        if player.health_points == 0:   # If the player loses all their HP
                             game_over = True  # You lose the game if you lose all of your HP
 
                         else:  # If the player still has some HP left
@@ -1051,6 +1057,9 @@ return a value error.
 
 I will take the damage dealt from my main function, which should be an integer, and then make the calculation here 
 instead of making it in the main() function.
+
+The damage calculation function should never give a negative number, and should never give a float. I could put a Value 
+Error there to check that no floats nor negative numbers are assigned to it.
 """
 
 
@@ -1059,6 +1068,41 @@ def damage_calculation(damage_points):
     total_damage_dealt = damage_points + random.randint(-10, 10)
 
     return total_damage_dealt
+
+
+"""  Function 2: Health Points remaining after being attacked.
+
+This function calculates how much HP is remaining for that character, be it the enemy, or the player. The HP should be 
+a float, and always positive.
+
+The first parameter will be a character class, NOT an integer nor a string.
+
+The third parameter will be
+the total damage dealt to that character (which already adds the random number to the damage dealt).
+
+I will make a function that will calculate how many health points the character has left (be it either the enemy
+or the player). It will return an integer, which will be the new number that should be added to the enemy or to
+the player's health points. Sure, the hp remaining() function is just a subtraction, but it also makes the HP
+automatically zero if the HP is negative. Neither the player nor the enemy should show negative HP.
+"""
+
+
+def health_points_remaining_calculation(current_hp, total_damage_dealt):
+
+    # This updates the character's current number of health points
+    hp_remaining = current_hp - total_damage_dealt
+
+    # If the character gets negative HP or 0
+    if hp_remaining <= 0:
+        # I will always change the HP to "0" if the enemy's defeated
+        hp_remaining = 0
+
+        # victory = True  # You win the game if you defeat the enemy
+
+        # # This will close the game after you hit the confirmation key one more time
+        # should_exit_game = True
+
+    return hp_remaining
 
 """ This lets me use the main function if I import this script as a library without any issues (source: my 
 "Shirtificate" assignment from Week 8 from my 2025 homework assignment submission for Harvard's CS50 Python's course).
