@@ -35,3 +35,15 @@ a Value Error if at least 1 of those parameters are a float, for instance.
 def test_health_points_remaining_calculation_float():
     with pytest.raises(ValueError):
         assert (health_points_remaining_calculation(50.5, 20)) == 30.5
+
+
+""" ### Unit test for function 3: Test for the Drink Potion() function.
+
+For the potion drinking mechanic, I could simply check that the user’s HP is healed correctly. That is, if you have 
+200 HP in total HP, and you have 80 HP left, that if you drink the potion, you will have 160 HP after drinking the 
+potion. 
+"""
+
+
+def test_drink_potion_heal_up_to_160_hp():
+    assert (drink_potion(80, 200)) == 160
