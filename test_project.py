@@ -23,3 +23,15 @@ I need to use "with pytest.raises(ValueError):" to check with pytest if a Value 
 def test_damage_calculation_negative_numbers():
     with pytest.raises(ValueError):
         assert (damage_calculation(-20)) in range(-30, -9)
+
+
+""" ### Unit test for function 2: Test for the HP Remaining Calculation() function.
+
+Neither the current Health Points nor the Total Damage Dealt can be floats, nor strings. So, I'll try to raise
+a Value Error if at least 1 of those parameters are a float, for instance.
+"""
+
+
+def test_health_points_remaining_calculation_float():
+    with pytest.raises(ValueError):
+        assert (health_points_remaining_calculation(50.5, 20)) == 30.5

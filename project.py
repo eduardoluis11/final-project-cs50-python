@@ -1086,10 +1086,22 @@ the player's health points. Sure, the hp remaining() function is just a subtract
 automatically zero if the HP is negative. Neither the player nor the enemy should show negative HP.
 
 This should also always return and integer, and 0 or a positive number. I will add a Raise ValueError here otherwise.
+I need to look at the parameters to raise Value Errors, though. So, since neither the total damage dealt nor the 
+current HP can be a float, and neither can be strings, I could raise a value error. I'll raise a value error
+if either of thise values are not integers.
 """
 
 
 def health_points_remaining_calculation(current_hp, total_damage_dealt):
+
+    # If the current HP isn't an integer
+    # If the damage points are negative or aren't an integer
+    if not isinstance(current_hp, int) or not isinstance(total_damage_dealt, int):
+
+        # I will raise a Value Error
+        raise ValueError
+
+
     # This updates the character's current number of health points
     hp_remaining = current_hp - total_damage_dealt
 
@@ -1102,6 +1114,7 @@ def health_points_remaining_calculation(current_hp, total_damage_dealt):
 
         # # This will close the game after you hit the confirmation key one more time
         # should_exit_game = True
+
 
     return hp_remaining
 
