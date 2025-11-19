@@ -817,8 +817,10 @@ def main():
                             # This will prevent the character from attacking right after they drink a potion.
                             has_player_attacked = False
 
-                            # This randomly calculates the damage that the player can do to the enemy (from -10 to 10)
-                            randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
+                            # This randomly calculates the damage that the player can do to the enemy (from -10 to 10).
+                            # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
+                            randomly_generated_damage_output = damage_calculation(player.attack_points)
+                            # randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
 
                             # This shows how much damage you've dealt to the enemy
                             battle_message = (
@@ -1032,6 +1034,29 @@ def main():
 # def display_battle_message():
 #     return 1
 
+
+""" Function 1: Damage calculation function. 
+
+This function calculates damage to be dealt to either the player or the enemy.
+
+I will refactor my snippets that calculates damage to extract it into a function. I will insert the attack points from 
+the player and from the enemy as a parameter when I call the function. Then, in the function that calculates the 
+damage, I will return the calculated damage as an integer. This function should raise a value error if the total damage 
+is a float instead of an integer.
+
+Then, I will create a unit test that will test that damage calculating function. If the assert has a float, it should 
+return a value error.
+
+I will take the damage dealt from my main function, which should be an integer, and then make the calculation here 
+instead of making it in the main() function.
+"""
+
+
+def damage_calculation(damage_points):
+
+    total_damage_dealt = damage_points + random.randint(-10, 10)
+
+    return total_damage_dealt
 
 """ This lets me use the main function if I import this script as a library without any issues (source: my 
 "Shirtificate" assignment from Week 8 from my 2025 homework assignment submission for Harvard's CS50 Python's course).

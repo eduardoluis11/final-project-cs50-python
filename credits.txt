@@ -19,6 +19,8 @@ https://soundcloud.com/nemoproducer/adsreal-industrial-disaster?si=4c93760c83084
 Link to Alberto Salinas' Soundcloud profile, which is were I got the track that
 I used: https://soundcloud.com/nemoproducer?ref=clipboard&p=a&c=1&si=216b578bd1c1487694ed1d13f270b191&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing
 
+I edited the original track by using Kdenlive.
+
 4) Copyright information about the Sprite used:
 
 I added a sprite by Penusbmic from his "Sci-Fi Character Pack 8" at itch.io at
