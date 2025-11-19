@@ -359,7 +359,7 @@ enemy = Character("Hostile Robot Leader", 190, 20)
 game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
 players_number_of_potions = 2  # Initial number of potions that the player has.
-hp_amount_that_potions_heal = 80  # Number of Health Points that you can heal from drinking potions
+
 
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
 battle_message_2 = ""  # If I need to add a second line of text to avoid text from overflowing the dialogue box.
@@ -618,7 +618,7 @@ def main():
     global display_battle_intro_message
     global display_battle_menu
     global players_number_of_potions
-    global hp_amount_that_potions_heal
+    # global hp_amount_that_potions_heal
     global battle_message
     global battle_message_2
     global has_player_attacked  # This keeps track of whether the player chooses the "Attack" command.
@@ -776,39 +776,22 @@ def main():
                             # This makes the battle menu to disappear so that the battle messages are rendered
                             display_battle_menu = False
 
-                            # This updates the battle message to indicate that you're drinking a potion
-                            battle_message = f"You drank a potion!"
-                            battle_message_2 = f"You have recovered {hp_amount_that_potions_heal} points of HP!"
+                            # I could all of this in the drink_potion() function, and just return the total HP healed
 
-                            # This reduces the number of potions that you have by 1
-                            players_number_of_potions = players_number_of_potions - 1
-
-                            # This will increase the Player's HP to heal them by using the potion.
-                            # The player should NEVER get any more HP than their total number of HP point
-                            if player.health_points + hp_amount_that_potions_heal > player.total_hp:
-                                player.health_points = 100
-                            else:
-                                # If you don't go over your total HP, add potion's HP amount to player's HP
-                                player.health_points = player.health_points + hp_amount_that_potions_heal
+                            # This restores the player's HP by calling a function that will make them use a potion.
+                            # The function will make sure to not heal the player beyond their total HP.
+                            player.health_points = drink_potion(player.health_points, player.total_hp)
 
                             # I should update the UI so that players can see that their HP has increased
                             players_hp_surface = game_font.render(f'HP: {player.health_points}/{player.total_hp}',
                                                                   False,
                                                                   'White')
 
-                            # This will update the battle menu's UI to update the number of potions remaining
-                            potion_command_surface = game_font.render(
-                                f'[2]: Use Potion ({players_number_of_potions} remaining)',
-                                False, 'White')  # Use Potion command
-
-                            # # # DEBUG: print "you have drank a potion"
-                            # # print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
-                            # # This prints how many potions you have remaining
-                            # print(f"Now, you have {players_number_of_potions} potions left.")
-
                             # Now, the enemy's turn begins, and the player's turn ends
                             is_players_turn = False
                             is_enemys_turn = True
+
+
 
                     else:  # If I'm no longer rendering the battle menu, and I'm rendering battle messages
 
@@ -837,13 +820,12 @@ def main():
                             # Second line of text to prevent the text from getting outside the dialogue box
                             battle_message_2 = f"to the {enemy.name}!"
 
-
-
                             # This should reduce the enemy's HP from the player's attack.
                             # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
                             # This sends the enemy's HP and the damage they suffered into a function to update
                             # their HP.
-                            enemy.health_points = health_points_remaining_calculation(enemy.health_points, randomly_generated_damage_output)
+                            enemy.health_points = health_points_remaining_calculation(enemy.health_points,
+                                                                                      randomly_generated_damage_output)
                             # enemy.health_points = enemy.health_points - randomly_generated_damage_output
 
                             # I will update the UI that displays the enemy's HP
@@ -851,7 +833,7 @@ def main():
                             enemys_hp_surface = game_font.render(f'Enemy\'s HP: {enemy.health_points}/{enemy.total_hp}',
                                                                  False, 'White')
 
-                            if enemy.health_points == 0:    # If you defeat the enemy, you win
+                            if enemy.health_points == 0:  # If you defeat the enemy, you win
                                 victory = True
 
                             # # DEBUG: This tells me how many HP points the enemy has after being attacked
@@ -915,7 +897,8 @@ def main():
                         # I COULD REFACTOR THIS TO PUT IT ON A FUNCTION OUTSIDE OF main()!
                         # This will update the player's HP by sending their current HP and the damage suffered to a
                         # function.
-                        player.health_points = health_points_remaining_calculation(player.health_points, randomly_generated_damage_output)
+                        player.health_points = health_points_remaining_calculation(player.health_points,
+                                                                                   randomly_generated_damage_output)
                         # player.health_points = player.health_points - randomly_generated_damage_output
 
                         # If the Player gets negative HP or 0
@@ -923,7 +906,7 @@ def main():
                         #     # I will always change the HP to "0" if the player is defeated
                         #     player.health_points = 0
 
-                        if player.health_points == 0:   # If the player loses all their HP
+                        if player.health_points == 0:  # If the player loses all their HP
                             game_over = True  # You lose the game if you lose all of your HP
 
                         else:  # If the player still has some HP left
@@ -1064,7 +1047,6 @@ Error there to check that no floats nor negative numbers are assigned to it.
 
 
 def damage_calculation(damage_points):
-
     total_damage_dealt = damage_points + random.randint(-10, 10)
 
     return total_damage_dealt
@@ -1084,11 +1066,12 @@ I will make a function that will calculate how many health points the character 
 or the player). It will return an integer, which will be the new number that should be added to the enemy or to
 the player's health points. Sure, the hp remaining() function is just a subtraction, but it also makes the HP
 automatically zero if the HP is negative. Neither the player nor the enemy should show negative HP.
+
+This should also always return and integer, and 0 or a positive number. I will add a Raise ValueError here otherwise.
 """
 
 
 def health_points_remaining_calculation(current_hp, total_damage_dealt):
-
     # This updates the character's current number of health points
     hp_remaining = current_hp - total_damage_dealt
 
@@ -1103,6 +1086,67 @@ def health_points_remaining_calculation(current_hp, total_damage_dealt):
         # should_exit_game = True
 
     return hp_remaining
+
+
+""" Function 3: Potion Drinking function.
+
+The potion function would be a good one. It would heal the player, and it would reduce the number of potions in your 
+backpack by one. Also, it should never be called if it’s 0. However, what should it return? It needs to return 
+something. It could return a string. It could return a console message such as “you have consumed a potion” if you have 
+at least 1 potion remaing, or “you don’t have any potions remaining. You’ll have to do something else with your turn”. 
+This would only be read in the console. But, for the rest, it would consume 1 potion, and heal the player in the 
+“backend”. OR, the string that could return could be the battle message saying that the user drank a potion.
+
+The total amount that potions heal, instead of being a global variable, could be a local variable inside of the 
+drink_potion() function. So, the amount healed to the player would need to be returned by the drink_potion() function.
+
+Heck, even the fact that your HP should never go beyond your total HP points if you were at full health could also be 
+inside the drink_potion() function.
+
+Also, I would raise errors if the HP healed by the potion is either negative, or float numbers, or a string.
+
+"""
+
+
+def drink_potion(current_hp, total_hp):
+
+    # Global variables that I'll use
+    # This takes your number of potions from a global variable
+    global players_number_of_potions
+    global battle_message
+    global battle_message_2
+    global potion_command_surface
+
+    # Amount of HP that potions heal. This can be a local variable within this function.
+    hp_amount_that_potions_heal = 80  # Number of Health Points that you can heal from drinking potions
+
+    # This reduces the number of potions that you have by 1
+    players_number_of_potions = players_number_of_potions - 1
+
+    # This will increase the Player's HP to heal them by using the potion.
+    # The player should NEVER get any more HP than their total number of HP point
+    if current_hp + hp_amount_that_potions_heal > total_hp:
+        players_hp_after_using_potion = 100
+    else:
+        # If you don't go over your total HP, add potion's HP amount to player's HP
+        players_hp_after_using_potion = current_hp + hp_amount_that_potions_heal
+
+    # This updates the battle message to indicate that you're drinking a potion
+    battle_message = f"You drank a potion!"
+    battle_message_2 = f"You have recovered {hp_amount_that_potions_heal} points of HP!"
+
+    # This will update the battle menu's UI to update the number of potions remaining
+    potion_command_surface = game_font.render(
+        f'[2]: Use Potion ({players_number_of_potions} remaining)',
+        False, 'White')  # Use Potion command
+
+    # # # DEBUG: print "you have drank a potion"
+    # # print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
+    # # This prints how many potions you have remaining
+    # print(f"Now, you have {players_number_of_potions} potions left.")
+
+    return players_hp_after_using_potion
+
 
 """ This lets me use the main function if I import this script as a library without any issues (source: my 
 "Shirtificate" assignment from Week 8 from my 2025 homework assignment submission for Harvard's CS50 Python's course).
