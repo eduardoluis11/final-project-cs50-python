@@ -7,6 +7,8 @@ from project import damage_calculation, health_points_remaining_calculation, dri
 
 """ ## Unit tests for testing project.py, that is, tests for testing my final project.
 
+I changed the name of the 3 unit tests so that they have the exact same name of their respective custom functions,
+as requested by the instructions for the Final Project.
 """
 
 """ ### Unit test for function 1: Test to test the Damage Calculation function.
@@ -20,7 +22,7 @@ I need to use "with pytest.raises(ValueError):" to check with pytest if a Value 
 """
 
 
-def test_damage_calculation_negative_numbers():
+def test_damage_calculation():
     with pytest.raises(ValueError):
         assert (damage_calculation(-20)) in range(-30, -9)
 
@@ -32,7 +34,7 @@ a Value Error if at least 1 of those parameters are a float, for instance.
 """
 
 
-def test_health_points_remaining_calculation_float():
+def test_health_points_remaining_calculation():
     with pytest.raises(ValueError):
         assert (health_points_remaining_calculation(50.5, 20)) == 30.5
 
@@ -45,5 +47,5 @@ potion.
 """
 
 
-def test_drink_potion_heal_up_to_160_hp():
+def test_drink_potion():
     assert (drink_potion(80, 200)) == 160
