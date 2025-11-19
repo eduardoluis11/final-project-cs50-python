@@ -291,8 +291,8 @@ game_window = pygame.display.set_mode((720, 576))
 pygame.display.set_caption("Gold Standard")
 
 # Music. ACTIVATE LATER.
-# game_music = pygame.mixer.Sound("assets/audio/industrial-disaster-alberto-salinas-no-guitar.mp3")  # Game's music
-# game_music.play(loops=-1)  # This plays the music, and makes it loop indefinitely
+game_music = pygame.mixer.Sound("assets/audio/industrial-disaster-alberto-salinas-no-guitar.mp3")  # Game's music
+game_music.play(loops=-1)  # This plays the music, and makes it loop indefinitely
 
 """ Class that stores the properties for each character (both the player and the enemy).
 
@@ -312,7 +312,10 @@ course.)
 I’m properly adding and creating the main character by using the Character class by using object oriented programming.
 
 I created both the player and the enemy as global variables since I want to access the player and the enemy's 
-properties in all of my functions, be it on main(), or be it in the other 3 functions that i need to create.
+properties in all of my functions, be it on main(), or be it in the other 3 functions that I need to create.
+
+I reactivated  the music, added 1 more potion so that you have 3 potions in total, and I fixed the “game over” 
+message so that it’s shorter and doesn’t overflow the text box. I’m done with the coding aspect of this project.
 """
 
 
@@ -358,7 +361,7 @@ enemy = Character("Hostile Robot Leader", 190, 20)
 # This specifies the font that I will use, and its size. At least, I'll use this for the playable character's name.
 game_font = pygame.font.Font(None, 32)
 players_current_hp = 100  # This stores the current HP for the player. This goes down if the enemy hurts you.
-players_number_of_potions = 2  # Initial number of potions that the player has.
+players_number_of_potions = 3  # Initial number of potions that the player has.
 
 
 battle_message = "A Hostile Robot Leader has appeared!"  # Battle message. This will change throughout the game.
@@ -673,7 +676,7 @@ def main():
                     #     player.health_points = 0
 
                     # I will render "Game Over" in a battle message
-                    battle_message = "You've lost all of your Health Points, and became unconscious."
+                    battle_message = "You've been defeated."
                     battle_message_2 = "GAME OVER"
 
                     # This should overwrite the battle message surface with the new battle message after any action in
