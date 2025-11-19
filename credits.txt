@@ -35,3 +35,9 @@ characters!"
 
 5)  Coding With Russ on YouTube at
 https://youtu.be/Xzmpl5tnJnc?si=58Mj8YgG3SoqKEek&t=54
+
+6) Katriel on Stack Overflow
+at https://stackoverflow.com/questions/3501382/checking-whether-a-variable-is-an-integer-or-not
+
+*) Any other sources not mentioned here could be present in the source code's comments
+with a link to it.
