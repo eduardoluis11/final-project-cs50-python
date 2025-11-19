@@ -305,8 +305,10 @@ class Character:
 player = Character("Ludwig", 100, 20)
 
 # This creates the enemy's statistics / stats by using the Character class
+# You will need to use potions to beat this enemy
+enemy = Character("Hostile Robot Leader", 200, 20)
 # enemy = Character("Hostile Robot Leader", 500, 50)  # High on HP. Hard so that you can lose.
-enemy = Character("Hostile Robot Leader", 100, 15)  # Low on HP so that you can win easily
+# enemy = Character("Hostile Robot Leader", 100, 15)  # Low on HP so that you can win easily
 
 # # DEBUG: this should print me the enemy's properties
 # print("Enemy's stats: ")
@@ -555,6 +557,16 @@ for keeping track if you're attacking. The bug that caused the player to attack 
 the "has player attacked" boolean was never being disabled after attacking. Also, I fixed the bug in which the game 
 froze if I drank a potion on the very first turn. The bug was that the player's turn never ended after drinking a
 potion.
+
+So, now I will try my strategy of requiring the player to drink a potion to defeat the enemy. I will make the enemy 
+have like 300 HP. So, you will have to use your potions only when you’re really low on HP to be able to last enough 
+turns to defeat the enemy. The player will need a strategy in order to beat the boss. Just hitting the attack button 
+won’t work.
+
+The game now has some strategy. You can no longer win by spamming the “attack” command. And you can’t drink the potions 
+whenever you feel like. You need to drink them whenever your HP is really low. If you drink them while your HP is high, 
+you waste them, and you will most likely lose at the end. If the boss has 200 HP and the same attack points as the 
+player, the difficulty is just right (medium to medium-easy, if you know when to drink the potions). 
 """
 
 
@@ -718,7 +730,7 @@ def main():
                         # If the user presses "2", I'll handle the potion drinking mechanic
                         elif event.key == pygame.K_2 and players_number_of_potions > 0:
 
-                            # TODO
+
 
                             # This makes the battle menu to disappear so that the battle messages are rendered
                             display_battle_menu = False
