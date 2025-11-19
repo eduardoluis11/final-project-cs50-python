@@ -542,6 +542,19 @@ of HP points.
 
 You can no longer use the “potion” command if you run out of potions. Pressing "2" won't do anything if you run out
 of potions.
+
+One way to fix the bug in which the player attacks the enemy immediately after drinking a potion would be to use 
+booleans to detect whether the user is attacking or using a potion. I don’t like overusing booleans, but that would 
+work. If the player is attacking, I would put a boolean that says “player is attacking”. Meanwhile, if the player is 
+drinking a potion, I will put a boolean saying “player is drinking potion”. Then after doing either action, I will pass 
+the turn to the enemy. And when the player’s turn begins, I will set both the “attacking” and the “drinking potion” 
+booleans to false.
+
+In the end, I didn't even need to create a boolean for drinking potions, and I had created a long time ago a boolean
+for keeping track if you're attacking. The bug that caused the player to attack right after drinking a potion was that 
+the "has player attacked" boolean was never being disabled after attacking. Also, I fixed the bug in which the game 
+froze if I drank a potion on the very first turn. The bug was that the player's turn never ended after drinking a
+potion.
 """
 
 
@@ -553,7 +566,7 @@ def main():
     global hp_amount_that_potions_heal
     global battle_message
     global battle_message_2
-    global has_player_attacked
+    global has_player_attacked  # This keeps track of whether the player chooses the "Attack" command.
     global is_players_turn
     global is_enemys_turn
     global did_enemy_use_regular_attack
@@ -567,6 +580,10 @@ def main():
     global should_exit_game
 
     # End of the Global Variables
+
+    # I could create some local variables. I don't need to use that many global variables.
+    # is_player_attacking = False
+    # is_player_using_potion = False  # This keeps track of whether the player chose the "Potion" command.
 
     while True:  # Infinite loop that will pretty much make the entire game run
         # while not should_exit_game:  # Loop that will pretty much make the entire game run. Exits if Game over or
@@ -604,7 +621,8 @@ def main():
                     battle_message = "You've lost all of your Health Points, and became unconscious."
                     battle_message_2 = "GAME OVER"
 
-                    # This should overwrite the battle message surface with the new battle message after any action in the game.
+                    # This should overwrite the battle message surface with the new battle message after any action in
+                    # the game.
                     battle_messages_surface = game_font.render(battle_message, False, 'White')
 
                     # This renders the text for the current battle message
@@ -651,6 +669,9 @@ def main():
                             # This makes the battle menu to disappear so that the battle messages are rendered
                             display_battle_menu = False
 
+                            # # This tells the game that the player is attacking, not using a potion.
+                            # is_player_attacking = True
+
                             # DEBUG: this will modify the battle message so that it says that you attacked the enemy.
                             # NONE OF THESE 2 lines of code work! They don't render anything to the screen!
                             # battle_message = "Ludwig attacks the enemy!"
@@ -661,10 +682,10 @@ def main():
 
                             battle_message_2 = ""  # Second line of the battle message (empty)
 
-                            # DEBUG: print "you attacked"
-                            print(f"{player.name} attacks the enemy!")
+                            # # DEBUG: print "you attacked"
+                            # print(f"{player.name} attacks the enemy!")
 
-                            # This tells me that the player just selected the "attack" command
+                            # This tells me that the player just selected the "attack" command, and not using a potion
                             has_player_attacked = True
 
                             # DEBUG: This tells me what the current value of the "has player attacked" boolean
@@ -694,7 +715,7 @@ def main():
                             #     is_players_turn = False
                             #     is_enemys_turn = True
 
-                        # if the user presses "2", I'll handle the potion drinking mechanic
+                        # If the user presses "2", I'll handle the potion drinking mechanic
                         elif event.key == pygame.K_2 and players_number_of_potions > 0:
 
                             # TODO
@@ -727,10 +748,14 @@ def main():
                                 f'[2]: Use Potion ({players_number_of_potions} remaining)',
                                 False, 'White')  # Use Potion command
 
-                            # # DEBUG: print "you have drank a potion"
-                            # print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
-                            # This prints how many potions you have remaining
-                            print(f"Now, you have {players_number_of_potions} potions left.")
+                            # # # DEBUG: print "you have drank a potion"
+                            # # print(f"Ludwig drank a potion! You have recovered {hp_amount_that_potions_heal} points of HP!")
+                            # # This prints how many potions you have remaining
+                            # print(f"Now, you have {players_number_of_potions} potions left.")
+
+                            # Now, the enemy's turn begins, and the player's turn ends
+                            is_players_turn = False
+                            is_enemys_turn = True
 
                     else:  # If I'm no longer rendering the battle menu, and I'm rendering battle messages
 
@@ -739,6 +764,11 @@ def main():
 
                         # If the player chose "Attack" and presses the confirmation key.
                         if has_player_attacked and event.key == pygame.K_z:
+
+                            # FIRST OF ALL, I need to tell the game that the player is no longer attacking.
+                            # This will prevent the character from attacking right after they drink a potion.
+                            has_player_attacked = False
+
                             # This randomly calculates the damage that the player can do to the enemy (from -10 to 10)
                             randomly_generated_damage_output = player.attack_points + random.randint(-10, 10)
 
