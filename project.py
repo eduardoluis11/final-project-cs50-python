@@ -254,6 +254,14 @@ Link to Alberto Salinas' Soundcloud profile, which is were I got the track that
 I used: https://soundcloud.com/nemoproducer?ref=clipboard&p=a&c=1&si=216b578bd1c1487694ed1d13f270b191&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing
 ====
 
+====
+
+Copyright information about the Sprite used:
+
+I added a sprite by Penusbmic from his "Sci-Fi Character Pack 8" at itch.io at
+https://penusbmic.itch.io/sci-fi-character-pack-8. The sprite used is called "The Storm Head Droid".
+
+
 """
 import sys
 
@@ -359,7 +367,7 @@ display_battle_menu = False  # Boolean that will tell the game if it should rend
 # This loads the enemy sprite, but doesn't render it yet (source:
 # https://youtu.be/AY9MnQ4x3zk?si=2sgfMIq-zyCv-eHx&t=2645).
 # EDIT LATER, since I'm using a PLACEHOLDER sprite.
-enemy_surface = pygame.image.load('assets/images/sprites/red-rectangle-enemy-placeholder.png').convert_alpha()
+enemy_surface = pygame.image.load('assets/images/sprites/enemy-sprite-penusbmic.png').convert_alpha()
 
 # This creates a rectangle for the enemy sprite's surface. I will place it around the center of the screen.
 enemy_rectangle = enemy_surface.get_rect(center=(360, 288))
