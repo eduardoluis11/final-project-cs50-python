@@ -290,8 +290,9 @@ game_window = pygame.display.set_mode((720, 576))
 # This will add the game's title to the window's tab
 pygame.display.set_caption("Gold Standard")
 
-game_music = pygame.mixer.Sound("assets/audio/industrial-disaster-alberto-salinas-no-guitar.mp3")  # Game's music
-game_music.play(loops=-1)  # This plays the music, and makes it loop indefinitely
+# Music. ACTIVATE LATER.
+# game_music = pygame.mixer.Sound("assets/audio/industrial-disaster-alberto-salinas-no-guitar.mp3")  # Game's music
+# game_music.play(loops=-1)  # This plays the music, and makes it loop indefinitely
 
 """ Class that stores the properties for each character (both the player and the enemy).
 
@@ -897,7 +898,8 @@ def main():
 
                     elif did_enemy_use_regular_attack and event.key == pygame.K_z:
                         # This randomly calculates the damage that the enemy can do to the player (from -10 to 10)
-                        randomly_generated_damage_output = enemy.attack_points + random.randint(-10, 10)
+                        # CALL A FUNCTION HERE, so that the calculation is done in a function.
+                        randomly_generated_damage_output = damage_calculation(enemy.attack_points)
 
                         # This shows how much damage you've dealt to the enemy
                         battle_message = (
