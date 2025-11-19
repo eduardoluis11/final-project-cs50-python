@@ -1,6 +1,8 @@
+# Final Project: Gold Standard - A video game made in Python
+
 # Author: Eduardo Salinas
 
-""" Final Project: Gold Standard - A video game made in Python
+""" ## Final Project: Gold Standard - A video game made in Python
 
 I will make “Gold Standard” (WORKING TITLE, it may be subject to change): a game inspired by Mother 2, which teaches
 about economics.
@@ -231,6 +233,27 @@ super attack, or wasting a turn).
 
 To import the "randint" library, I need to import it form the "random" library (source: Clear Code on YouTube at
 https://youtu.be/AY9MnQ4x3zk?si=mfCvPMEh2o7MNjM0).
+
+To add the variable that will store the music that will play during the game, I need to use
+"pygame.mixer.Sound(path to the song)" (source: Clear Code on YouTube at
+https://youtu.be/AY9MnQ4x3zk?si=8LvD8ssCubbE2lgY&t=13575). Then, to play the music and to make it loop forever,
+I need to use ".play(loops = -1)" (source: Clear Code on YouTube at
+https://youtu.be/AY9MnQ4x3zk?si=epfdbPCbvBJeVaE0&t=13645).
+
+===
+Copyright information about the song used:
+
+Music done by Alberto Salinas, A.K.A "Nemo", A.K.A "Becktor", A.K.A "ADSReal".
+I got his explicit consent to use one of his tracks. DO NOT USE HIS MUSIC WITHOUT
+HIS PERMISSION.
+
+Track used: ADSReal-"Industrial Disaster" Original Instrumental Song:
+https://soundcloud.com/nemoproducer/adsreal-industrial-disaster?si=4c93760c83084411b80e6e6fc102c211&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing
+
+Link to Alberto Salinas' Soundcloud profile, which is were I got the track that
+I used: https://soundcloud.com/nemoproducer?ref=clipboard&p=a&c=1&si=216b578bd1c1487694ed1d13f270b191&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing
+====
+
 """
 import sys
 
@@ -240,7 +263,7 @@ from sys import exit  # If I want to exit the game properly, I'll use sys.exit()
 
 import random
 
-# I will import "random" and "randomint" so that the characters do random amounts of damage based on their base attack
+# I will import "random" and "randint" so that the characters do random amounts of damage based on their base attack
 from random import randint
 
 # # Class which will store the characters' Health Points and Attack Points as properties
@@ -256,6 +279,9 @@ game_window = pygame.display.set_mode((720, 576))
 
 # This will add the game's title to the window's tab
 pygame.display.set_caption("Gold Standard")
+
+game_music = pygame.mixer.Sound("assets/audio/industrial-disaster-alberto-salinas.mp3")  # Game's music
+game_music.play(loops=-1)  # This plays the music, and makes it loop indefinitely
 
 """ Class that stores the properties for each character (both the player and the enemy).
 
@@ -306,7 +332,7 @@ player = Character("Ludwig", 100, 20)
 
 # This creates the enemy's statistics / stats by using the Character class
 # You will need to use potions to beat this enemy
-enemy = Character("Hostile Robot Leader", 200, 20)
+enemy = Character("Hostile Robot Leader", 190, 20)
 # enemy = Character("Hostile Robot Leader", 500, 50)  # High on HP. Hard so that you can lose.
 # enemy = Character("Hostile Robot Leader", 100, 15)  # Low on HP so that you can win easily
 
@@ -729,8 +755,6 @@ def main():
 
                         # If the user presses "2", I'll handle the potion drinking mechanic
                         elif event.key == pygame.K_2 and players_number_of_potions > 0:
-
-
 
                             # This makes the battle menu to disappear so that the battle messages are rendered
                             display_battle_menu = False
