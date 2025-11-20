@@ -10,7 +10,7 @@ Eduardo Salinas
 
 #### Description:
 	
-	For my final project, I made a video game in Python by using the Pygame pip module. The game is a turn-based RPG. 
+For my final project, I made a video game in Python by using the Pygame pip module. The game is a turn-based RPG. 
 
 The objective of the game is to defeat the only enemy in the game. You need to attack them until you deplete their Health Points (HP). If you attack the enemy until their HP drops to zero, you will get a victory message. After pressing the “Z” key during the victory message, you will exit the game.
 
@@ -53,7 +53,8 @@ I named the main character “Ludwig” as a reference to “Ludwig van Beethove
 - “Z”: Scroll through the messages to read them and continue with the battle. It doesn’t do anything if the battle menu that shows the “Attack” and “Potion” commands is visible.
  
 - “1”: Attack. You can only use it if the battle menu that displays the “attack” and “potion” commands is visible.
--“2”: Use a potion. You can only use it if the battle menu showing the “attack” and potion commands is visible. And you can only use it if you have any potions left. If the player doesn’t have any potions left, pressing this key on your keyboard won’t do anything.
+
+- “2”: Use a potion. You can only use it if the battle menu showing the “attack” and potion commands is visible. And you can only use it if you have any potions left. If the player doesn’t have any potions left, pressing this key on your keyboard won’t do anything.
 
 ###### How to install:
 
