@@ -30,7 +30,7 @@ If you run out of potions too early by drinking them while your HP was relativel
 
 However, you could still lose the game even if you drink your potions in an efficient way. Since the damage dealt by both the player and the enemy is randomly generated, if the enemy has good luck, they can deal you high amounts of damage. So, even while drinking your potions wisely, you could still lose the game sometimes. I would need to balance the difficulty later on to prevent the fact that you will sometimes lose due to back luck or bad “RNG”.
 
-I named the main character “Ludwig” as a reference to “Ludwig van Beethoven”. Since the game was supposed to have a music-based combat, I wanted to put a musical reference to the game. So, I decided to put the name of a famous composer as the name of the main character.
+I named the main character “Ludwig” as a reference to "Ludwig Von Mises", my favorite economist. It's also a reference to “Ludwig van Beethoven”. Since the game was supposed to have a music-based combat, I wanted to put a musical reference to the game. So, I decided to put the name of a famous composer as the name of the main character.
 
 
 ##### What each file and folder does:
